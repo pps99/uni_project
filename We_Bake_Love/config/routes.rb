@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   end
 
   resources :cart_items
-  resource :carts, only: [:show]
+  resource :carts
 
   root "home_page#index"
   # Home

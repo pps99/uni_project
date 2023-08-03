@@ -3,12 +3,16 @@ class CartItemsController < ApplicationController
     @cart_items = CartItem.all
   end
   def create
-    binding.pry
       @cart = current_cart
       @cart_item = @cart.cart_items.new(cart_params)
       @cart.save
       session[:cart_id] = @cart_id
       render json: { cart_item: @cart_item }, status: :ok
+  end
+
+  def show
+    @cart_items = CartItem.all
+    render json: { cart_items: @cart_items }, status: :ok
   end
 
   def update

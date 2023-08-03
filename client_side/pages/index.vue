@@ -8,20 +8,7 @@
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
-          <div>
-            <b-dropdown id="dropdown-1" class="m-md-2">
-              <template #button-content>
-                  <b-icon icon="cart-plus-fill" aria-hidden="true"></b-icon> Cart
-              </template>
-              <cart_items_display :cart_items="cart_items" />
-              <b-dropdown-item>First Action</b-dropdown-item>
-              <b-dropdown-item>Second Action</b-dropdown-item>
-              <b-dropdown-item>Third Action</b-dropdown-item>
-              <b-dropdown-divider></b-dropdown-divider>
-              <b-dropdown-item active>Active action</b-dropdown-item>
-              <b-dropdown-item disabled>Disabled action</b-dropdown-item>
-            </b-dropdown>
-          </div>
+          <cart_items_display />
         </div>    
         <a @click="logout" href="#"><font-awesome-icon icon="reply" class="mr-2 text-danger" /> Logout</a>
       </div>
@@ -46,7 +33,7 @@
                   <b-icon icon="dash" aria-hidden="true"></b-icon> 
               </button> 
               <div v-for="quantity in quantities" :key="quantity.id" v-show="relateditem.id == quantity.id">
-                <b-form-input type="number" class="text-right" min="0.00" v-model="quantity.quantity" :value="quantity.quantity">{{ quantity.quantity  }}</b-form-input>
+                <b-form-input type="number" class="text-right" min="0.00" :value="quantity.count">{{ quantity.count  }}</b-form-input>
               </div>
               
               <button @click="increment(relateditem.id)" class="rounded-circle px-2 ml-2">
@@ -85,8 +72,6 @@ export default {
         unit_price: ''
       },
       quantities: [],
-      cart_items: [],
-      item_quantity: 0,
     }
   },
   methods: {
@@ -106,7 +91,7 @@ export default {
       this.items.filter(item =>{
         if (item.type_name == type_name){
           this.relateditems.push(item)
-          this.quantities.push({'id':item.id, 'quantity': 0})
+          this.quantities.push({'id':item.id, 'count': 0})
         }
       })
     },
@@ -114,15 +99,11 @@ export default {
       this.cart_item.cake_id = relateditem.id
       this.cart_item.cake_name = relateditem.name
       this.cart_item.unit_price = relateditem.price
-      console.log(this.item_quantity);
       this.$axios.post(`/cart_items`,this.cart_item)
         .then(response => {
-          console.log(response);
-          this.cart_items.push(response.data.cart_item);
-          console.log(this.cart_items);
           this.cart_item.quantity = 0;
           this.quantities.filter(quantity => {
-            quantity.quantity = '0'
+            quantity.count = '0'
           })
         })
         .catch(error => {
@@ -139,18 +120,16 @@ export default {
       this.quantities.map( quantity => {
         if(quantity.id == id)
         {
-          this.cart_item.quantity = ++quantity.quantity;
+          this.cart_item.quantity = ++quantity.count;
         }
       })
       
     },
     decrement(id) {
-      console.log(id)
-      console.log(this.quantities)
       this.quantities.map( quantity => {
-        if(quantity.id == id && quantity.quantity !=0)
+        if(quantity.id == id && quantity.count !=0)
         {
-          this.cart_item.quantity = --quantity.quantity;
+          this.cart_item.quantity = --quantity.count;
         }
       })
     }
