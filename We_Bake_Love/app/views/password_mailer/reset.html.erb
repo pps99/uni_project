@@ -1,0 +1,8 @@
+<h2> Dear, <%= params[:user].name %> </h2>
+
+<p> Someone requested a reset of your password.</p>
+<p> If this was you,click the link to reset your password.</p>
+<p> The link will expire automatically in 15 minutes.</p>
+
+
+<%= link_to "Reset Your Password", "http://localhost:3000/passwordreset?user_email=#{params[:user].email}&token=#{@token}" %>
