@@ -24,6 +24,10 @@ class CakeService
       CakeRepository.getItems
     end
 
+    def search(value)
+      CakeRepository.search(value)
+    end
+
     def getCakeByType(type_name)
       @cake = CakeRepository.getCakeByType(type_name)
     end

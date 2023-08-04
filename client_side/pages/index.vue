@@ -4,18 +4,18 @@
       <div class="container-fluid">
         <a class="navbar-brand" href="#">Navbar</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent"> 
-          <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
+          <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="search">
+            <button class="btn btn-outline-success"  @click.prevent="searchitem()">Search</button>
           </form>
-          <cart_items_display />
+          <cart_items_display ref="childRef" />
         </div>    
         <a @click="logout" href="#"><font-awesome-icon icon="reply" class="mr-2 text-danger" /> Logout</a>
       </div>
     </nav>
 
     <ul class="nav nav-tabs mb-5" id="myTab" role="tablist">
-      <li class="nav-item" id="clk" role="" v-for="type_name in type_names" :key="type_name" >
+      <li class="nav-item" id="clk" role="" v-for="type_name in type_names" :key="type_name.id" >
         <button class="nav-link" @click="selectRelatedItems(type_name)" id="type_name" data-toggle="tab" data-target="" type="button" role="tab" aria-controls="" aria-selected="false">{{ type_name }}</button>
       </li>
     </ul>
@@ -69,9 +69,10 @@ export default {
         quantity: '',
         cake_id: '',
         cake_name: '',
-        unit_price: ''
+        unit_price: '',
       },
       quantities: [],
+      search: ''
     }
   },
   methods: {
@@ -87,6 +88,7 @@ export default {
       return `http://127.0.0.1:8080${image}`
     },  
     selectRelatedItems(type_name) {
+      this.quantities = []
       this.relateditems = []
       this.items.filter(item =>{
         if (item.type_name == type_name){
@@ -99,12 +101,16 @@ export default {
       this.cart_item.cake_id = relateditem.id
       this.cart_item.cake_name = relateditem.name
       this.cart_item.unit_price = relateditem.price
+      if (this.cart_item.quantity == 0 ){
+        return alert("Please Chose an Item");
+      }
       this.$axios.post(`/cart_items`,this.cart_item)
         .then(response => {
           this.cart_item.quantity = 0;
           this.quantities.filter(quantity => {
             quantity.count = '0'
           })
+          this.$refs.childRef.get_all_card_items();
         })
         .catch(error => {
           this.$notify({
@@ -132,7 +138,27 @@ export default {
           this.cart_item.quantity = --quantity.count;
         }
       })
-    }
+    },
+    searchitem(){
+      this.$axios.post(`/cakes/search?search=${this.search}`)
+        .then(response => {
+          this.$router.push('#')
+          console.log(response);
+          this.type_names = response.data.type_names
+          this.items = response.data.items
+          this.selectRelatedItems(this.type_names[0])
+          this.search = ''
+        })
+        .catch(error => {
+          this.$notify({
+            title: 'Fail',
+            text: 'Something went wrong. Please try again',
+            type: 'error'
+          });
+          this.errors = error.response.data.error
+          this.errorMessage = true
+        })
+    },
   },
 
   mounted() {

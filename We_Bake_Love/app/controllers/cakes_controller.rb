@@ -62,6 +62,11 @@ class CakesController < ApplicationController
     end
   end
 
+  def search
+    @cake, @type_name = CakeService.search(params[:search])
+    render json: { items: @cake, type_names: @type_name }, status: :ok
+  end
+
   private
   def cake_params
     params.permit(:image, :name, :description, :price, :type_name).merge(user_id: current_user.id)

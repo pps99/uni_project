@@ -24,7 +24,7 @@ class CartItemsController < ApplicationController
   def destroy
     @cart_item = CartItem.find(params[:id])
     @cart_item.destroy
-    redirect_to '/carts/show'
+    render json: { cart_item: @cart_item }, status: :ok
   end
 
   def cancel
@@ -40,6 +40,6 @@ class CartItemsController < ApplicationController
   private
 
   def cart_params
-        params.permit(:cake_id, :quantity, :cake_name, :unit_price)
+        params.permit(:cake_id, :quantity, :cake_name, :unit_price, :id)
   end
 end
