@@ -8,7 +8,7 @@
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="search">
             <button class="btn btn-outline-success"  @click.prevent="searchitem()">Search</button>
           </form>
-          <cart_items_display ref="childRef" />
+          <cart_items_display ref="childRef" :cart_items="cart_items" />
         </div>    
         <a @click="logout" href="#"><font-awesome-icon icon="reply" class="mr-2 text-danger" /> Logout</a>
       </div>
@@ -65,14 +65,10 @@ export default {
       type_names: [],
       relateditems: [],
       items: [],
-      cart_item:{
-        quantity: '',
-        cake_id: '',
-        cake_name: '',
-        unit_price: '',
-      },
+      cart_items: [],
       quantities: [],
-      search: ''
+      search: '',
+      quantity: ''
     }
   },
   methods: {
@@ -98,44 +94,50 @@ export default {
       })
     },
     create_cart_item(relateditem){ 
-      this.cart_item.cake_id = relateditem.id
-      this.cart_item.cake_name = relateditem.name
-      this.cart_item.unit_price = relateditem.price
-      if (this.cart_item.quantity == 0 ){
+      if (this.quantity == 0 ){
         return alert("Please Chose an Item");
       }
-      this.$axios.post(`/cart_items`,this.cart_item)
-        .then(response => {
-          this.cart_item.quantity = 0;
-          this.quantities.filter(quantity => {
+      let present = false
+      console.log(this.cart_items.length);
+      console.log(this.cart_items)
+      const newItem = {
+          id: this.cart_items.length + 1,
+          cake_id: relateditem.id,
+          cake_name: relateditem.name,
+          unit_price: relateditem.price,
+          quantity: this.quantity
+        };
+      console.log(newItem);
+      this.cart_items.filter(cart_item => {
+        if(cart_item.cake_id == newItem.cake_id)
+        {
+          cart_item.quantity += newItem.quantity
+          present = true
+        }
+      })
+      if (!present){
+      this.cart_items = [...this.cart_items, newItem]
+      }
+      this.quantity = 0;
+      this.quantities.filter(quantity => {
             quantity.count = '0'
           })
-          this.$refs.childRef.get_all_card_items();
-        })
-        .catch(error => {
-          this.$notify({
-            title: 'Fail',
-            text: 'Something went wrong. Please try again',
-            type: 'error'
-          });
-          this.errors = error.response.data.error
-          this.errorMessage = true
-        })
+      // this.$refs.childRef.get_all_card_items();
     },
     increment(id) {
+      console.log(id,'id')
       this.quantities.map( quantity => {
         if(quantity.id == id)
         {
-          this.cart_item.quantity = ++quantity.count;
+          this.quantity = ++quantity.count;
         }
       })
-      
     },
     decrement(id) {
       this.quantities.map( quantity => {
         if(quantity.id == id && quantity.count !=0)
         {
-          this.cart_item.quantity = --quantity.count;
+          this.quantity = --quantity.count;
         }
       })
     },
@@ -177,7 +179,18 @@ export default {
           this.errors = error.response.data.error
           this.errorMessage = true
         })
+    if(localStorage.getItem('cart_items')){
+      this.cart_items = JSON.parse(localStorage.getItem('cart_items'))
+    }
   },
+  watch: {
+    cart_items: {
+      handler() {
+        localStorage.setItem('cart_items', JSON.stringify(this.cart_items))
+      },
+      deep: true,
+    },
+  }
 
 }
 </script>

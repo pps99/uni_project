@@ -17,10 +17,10 @@
                 {{ cart_item.cake_name }}
               </span>
               <span>
-                {{ cart_item.total }}
+                {{ cart_item.unit_price * cart_item.quantity }}
               </span>
             </div>
-            <button id="delete-icon" class="float-right" @click="delete_an_item(cart_item.id)">
+            <button id="delete-icon" class="float-right" @click="delete_an_item(index)">
                 <b-icon icon="trash" aria-hidden="true" style="color: red;"></b-icon>
             </button>
           </div>
@@ -36,50 +36,19 @@
 
 <script>
 export default {
+  props: {
+    cart_items: [],
+  },
   data(){
     return {
-      cart_items: [],
       indexToRemove: ''
     }
   },
   methods: {
-    get_all_card_items(){
-      this.$axios.get(`/cart_items/all`)
-        .then(response => {
-          this.cart_items = response.data.cart_items
-        })
-        .catch(error => {
-          this.$notify({
-            title: 'Fail',
-            text: 'Something went wrong. Please try again',
-            type: 'error'
-          });
-          this.errors = error.response.data.error
-          this.errorMessage = true
-        })
-    },
-    delete_an_item(id){
-      this.$axios.delete(`/cart_items/${id}`)
-        .then(response => {
-          this.indexToRemove = this.cart_items.findIndex(item => item.id === id);
-          this.cart_items.splice(this.indexToRemove, 1);
-        })
-        .catch(error => {
-          this.$notify({
-            title: 'Fail',
-            text: 'Something went wrong. Please try again',
-            type: 'error'
-          });
-          this.errors = error.response.data.error
-          this.errorMessage = true
-        })
+    delete_an_item(index){
+      this.cart_items.splice(index, 1)
     }
   },
-
-  mounted() {
-    this.get_all_card_items()
-  },
-  
 };
 </script>
 <style>
