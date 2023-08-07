@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   get '/user', to: 'users#auto_login'
   post "/logout", to: 'users#logout'
   post '/cakes/search', to: 'cakes#search'
+  post '/users/change_password', to: 'users#change_password'
 
   get "/send_mail", to: "posts#send_mail"
   get "/promote", to: "users#promote"

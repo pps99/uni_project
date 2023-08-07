@@ -9,10 +9,9 @@ class UserDetail < ApplicationRecord
 
   has_many :orders, :dependent => :destroy
 
-  
 
-  validates :phone, presence: true
-  validates :address, presence: true
+  # validates :phone, presence: true
+  # validates :address, presence: true
 
   # mtzl
   #belongs_to :order_details

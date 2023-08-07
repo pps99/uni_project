@@ -1,14 +1,13 @@
 class UsersController < ApplicationController
+  before_action :authorized, except: [:validate_login, :create, :logout]
   def index
     @users = User.all
+    render json: @users
   end
 
   def show
     @user = UserService.getUserByID(params[:id])
-  end
-
-  def new
-    @user = User.new
+    render json: @user
   end
 
   def create
@@ -22,25 +21,51 @@ class UsersController < ApplicationController
     end
   end
 
-  def edit
-    @user = UserService.getUserByID(params[:id])
-  end
+  # def edit
+  #   @user = UserService.getUserByID(params[:id])
+  # end
+
+  # def update
+  #   @user = UserService.getUserByID(params[:id])
+  #   @is_user_update = UserService.updateUser(@user, user_params)
+  #   if @is_user_update
+  #     redirect_to root_path
+  #   else
+  #     render :edit
+  #   end
+  # end
+
+  # def destroy
+  #   @user = UserService.getUserByID(params[:id])
+  #   UserService.destroy(@user)
+  #   redirect_to users_path
+  # end
+
+  # def edit
+  #   render json: {user: @user, image: @user.image}
+  # end
 
   def update
-    @user = UserService.getUserByID(params[:id])
-    @is_user_update = UserService.updateUser(@user, user_params)
-    if @is_user_update
-      redirect_to root_path
+    # if params[:image].present?
+    #   @image = @user.build_image(src: params[:image])
+    #   if !@image.save
+    #     old_image = Image.where(imageable: nil)
+    #     old_image.each do |image|
+    #       image.imageable_id = @user.id
+    #       image.imageable_type = 'User'
+    #       image.save
+    #     end
+    #   end
+    # end
+    binding.pry
+    if @user.update(user_params)
+      render json: @user, status: 200
     else
-      render :edit
+      @user.reload_image
+      render json: @user.errors, status: :unprocessable_entity
     end
   end
 
-  def destroy
-    @user = UserService.getUserByID(params[:id])
-    UserService.destroy(@user)
-    redirect_to users_path
-  end
 
   def validate_login
     @user = User.find_by(email: params[:email])
@@ -58,19 +83,32 @@ class UsersController < ApplicationController
     render json: { user: @user }
   end
 
-  def promote
-    @user = UserService.getUserByID(params[:format])
-    @sql = "update users set role='admin' where id =#{@user.id} ;"
-    ActiveRecord::Base.connection.execute(@sql)
-    redirect_to users_path
+  def change_password
+    if @user && @user.authenticate(params[:old_pass])
+      @user.update(user_params)
+      if @user.valid?(:uploaded)
+        render json: @user, status: 200
+      else
+        render json: @user.errors, status: :unprocessable_entity
+      end
+    else
+      render json: { error: 'Password Incorrect. Please try again' }, status: :unprocessable_entity
+    end
   end
 
-  def degrade
-    @user = UserService.getUserByID(params[:format])
-    @sql = "update users set role='user' where id =#{@user.id} ;"
-    ActiveRecord::Base.connection.execute(@sql)
-    redirect_to users_path
-  end
+  # def promote
+  #   @user = UserService.getUserByID(params[:format])
+  #   @sql = "update users set role='admin' where id =#{@user.id} ;"
+  #   ActiveRecord::Base.connection.execute(@sql)
+  #   redirect_to users_path
+  # end
+
+  # def degrade
+  #   @user = UserService.getUserByID(params[:format])
+  #   @sql = "update users set role='user' where id =#{@user.id} ;"
+  #   ActiveRecord::Base.connection.execute(@sql)
+  #   redirect_to users_path
+  # end
 
   
 
@@ -80,8 +118,11 @@ class UsersController < ApplicationController
   end
 
   private
+  def set_user
+    @user ||= User.find_by(id: params[:id])
+  end
 
   def user_params
-    params.permit(:name, :email, :password, :password_confirmation)
+    params.permit(:name, :email, :password, :password_confirmation, :phone, :address)
   end
 end

@@ -5,32 +5,32 @@
         <table class="table">
         <thead>
             <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Quantity</th>
-            <th scope="col">Price</th>
+            <th scope="col" style="text-align: center;">Name</th>
+            <th scope="col" style="text-align: center;">Quantity</th>
+            <th scope="col" style="text-align: center;">Price</th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="cart_item in cart_items" :key="cart_item.id">
-            <td>{{ cart_item.cake_name }}</td>
-            <td>{{ cart_item.quantity }}</td>
-            <td>{{ cart_item.unit_price * cart_item.quantity }}</td>
+            <td style="text-align: center;">{{ cart_item.cake_name }}</td>
+            <td style="text-align: center;">{{ cart_item.quantity }}</td>
+            <td style="text-align: center;">{{ cart_item.unit_price * cart_item.quantity }}</td>
             </tr>
             <tr>
                 <td colspan="2" style="text-align: right;">Subtotal:</td>
-                <td>{{ total }}</td>
+                <td style="text-align: center;">{{ total }}</td>
             </tr>
             <tr>
                 <td class="border-top-0" colspan="2" style="text-align: right;">Tax:</td>
-                <td class="border-top-0">{{ tax }}</td>
+                <td class="border-top-0" style="text-align: center;">{{ tax }}</td>
             </tr>
             <tr>
                 <td colspan="2" style="text-align: right; font-weight: bold;">Total:</td>
-                <td style="font-weight: bold;">{{ total + tax }}</td>
+                <td style="font-weight: bold; text-align: center;">{{ total + tax }}</td>
             </tr>
         </tbody>
         </table>
-        <button class="float-right mt-2 btn btn-outline-info">Confirm Order</button>
+        <button class="float-right mt-2 btn btn-outline-info" @click="save_order">Confirm Order</button>
       </div>
     </div>
   </div>
@@ -39,7 +39,7 @@
 export default{
     data() {
         return{
-           cart_items: this.$route.params['cartitems'],
+           cart_items: [],
            total: 0,
            tax: 0,
         }
@@ -54,9 +54,30 @@ export default{
       tax_price(){
         const percentage = 5;
         this.tax = (this.total * percentage) / 100;
+      },
+      save_order(){
+        console.log("HI")
+        console.log(this.cart_items)
+        this.$axios.post(`/user_details`,this.cart_items)
+        .then(response => {
+          alert("Your Order Have Saved Successfully")
+          localStorage.clear();
+          this.$router.push('/')
+          
+        })
+        .catch(error => {
+          this.$notify({
+            title: 'Fail',
+            text: 'Something went wrong. Please try again',
+            type: 'error'
+          });
+          this.errors = error.response.data.error
+          this.errorMessage = true
+        })
       }
     },
     mounted() {
+      this.cart_items = this.$route.params['cartitems']
       this.total_price(),
       this.tax_price()
     }

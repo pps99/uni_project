@@ -9,8 +9,8 @@
             <button class="btn btn-outline-success"  @click.prevent="searchitem()">Search</button>
           </form>
           <cart_items_display ref="childRef" :cart_items="cart_items" />
-        </div>    
-        <a @click="logout" href="#"><font-awesome-icon icon="reply" class="mr-2 text-danger" /> Logout</a>
+        </div>
+        <profile_avatar />
       </div>
     </nav>
 
@@ -54,11 +54,12 @@
 <script>
 import { BootstrapVueIcons } from 'bootstrap-vue'
 import cart_items_display from './sub_pages/cart_items_display.vue'
-
+import profile_avatar from './sub_pages/profile_avatar.vue'
 export default {
   components: {
     BootstrapVueIcons,
-    cart_items_display
+    cart_items_display,
+    profile_avatar
   },
   data(){
     return{
@@ -195,9 +196,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .card:hover {
   box-shadow: 8px 8px 16px 0 rgba(0, 0, 0, 0.2);
+  transform: scale(1.1); /* Enlarge the card on hover */
 }
 
 input[type=number]::-webkit-inner-spin-button,

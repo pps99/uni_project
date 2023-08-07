@@ -1,5 +1,5 @@
+require 'json'
 class UserDetailsController < ApplicationController
-  before_action :require_login
 
   def new
     @user_detail = UserDetail.new
@@ -42,31 +42,16 @@ class UserDetailsController < ApplicationController
   end
 
   def create
- 
- 
-    @sql = "select * from cart_items;"
-    @cart_items =  ActiveRecord::Base.connection.execute(@sql)
-    
-    Rails.logger.debug(@cart_items)
-    @cart_items.each do |cart_item|
-      @user_detail = UserDetail.new(userdetail_params)
-      @is_user_detail_create = UserDetailService.createUserDetail(@user_detail)
-      @user_detail.cake_name = cart_item[3]
-      @user_detail.quantity = cart_item[1]
-      @user_detail.price = cart_item[5]
-      @user_detail.save
-    end
+    @cart_items = JSON.parse(request.body.read)
 
-    if @is_user_detail_create
-      @sql = "SET SQL_SAFE_UPDATES = 0;"
-      ActiveRecord::Base.connection.execute(@sql)
-      @sql_delete = "delete  from cart_items;"
-      ActiveRecord::Base.connection.execute(@sql_delete)
-      @sql_safe_mode = "SET SQL_SAFE_UPDATES = 1;"
-      ActiveRecord::Base.connection.execute(@sql_safe_mode)
-      redirect_to root_path, notice: "Your Order is submitted"
+    @cart_items.each do |cart_item|
+      @user_detail = UserDetail.new(user_detail_params(cart_item))
+      UserDetailService.createUserDetail(@user_detail)
+    end
+    if @user_detail
+      render json: { user_detail: @user_detail }, status: :created
     else
-      render :new
+      render json: @user_detail.errors, status: :unprocessable_entity
     end
   end
 
@@ -76,7 +61,15 @@ class UserDetailsController < ApplicationController
 
   private
 
-  def userdetail_params
-    params.require(:user_detail).permit(:phone, :address, :user_id, :status, :total)
+  def user_detail_params(cart_item)
+    {
+      cake_name: cart_item['cake_name'],
+      quantity: cart_item['quantity'],
+      price: cart_item['unit_price'],
+      total: (cart_item['quantity'] * cart_item['unit_price']),
+      user_id: @user.id,
+      phone: '09780662858',
+      address: '21st street'
+    }
   end
 end

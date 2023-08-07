@@ -14,7 +14,7 @@
               </div>
               <div class="form-group">
                 <label>Email address</label>
-                <input type="email" class="form-control" v-model="user.email">
+                <input type="text" class="form-control" v-model="user.email">
                 <div v-if="errorMessage">
                     <span class="text-danger" v-for="error in errors.email" :key="error"> Email {{ error }}</span>
                   </div>
@@ -39,6 +39,20 @@
                     <span class="text-danger" v-for="error in errors.password_confirmation" :key="error"> Password Confirmation {{ error }}</span>
                   </div>
               </div>
+              <div class="form-group mt-4">
+                <label>Phone No</label>
+                <input type="text" class="form-control" v-model="user.phone">
+                <div v-if="errorMessage">
+                    <span class="text-danger" v-for="error in errors.phone" :key="error"> Phone {{ error }}</span>
+                  </div>
+              </div>
+              <div class="form-group mt-4">
+                <label>Address</label>
+                <input type="text" class="form-control" v-model="user.address">
+                <div v-if="errorMessage">
+                    <span class="text-danger" v-for="error in errors.address" :key="error"> Address {{ error }}</span>
+                  </div>
+              </div>
               <div class="clearfix">
                   <button @click="back" class="float-left btn btn-outline-dark">back</button>
                   <button type="submit" class="float-right btn btn-outline-primary">submit</button>
@@ -59,7 +73,9 @@
           name: '',
           email: '',
           password: '',
-          password_confirmation: ''
+          password_confirmation: '',
+          phone: '',
+          address: ''
         },
         errors: [],
         errorMessage: false,
