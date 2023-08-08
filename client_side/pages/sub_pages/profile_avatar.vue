@@ -2,8 +2,10 @@
   <div class="dropdown">
   <b-avatar size="3rem" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ $auth.user.user.name.charAt(0).toUpperCase() }}</b-avatar>
   <div class="dropdown-menu dropdown-menu-right">
-    <a class="dropdown-item" href="#">Action</a>
+    <NuxtLink :to="{ name: 'sub_pages-confirm_orders' }" class="dropdown-item">Confirm Orders</NuxtLink>
+    <hr class="hr hr-blurry" style="width: 75%;"/>
     <NuxtLink :to="{ name: 'sub_pages-profile_update' }" class="dropdown-item">Profile Update</NuxtLink>
+    <hr class="hr hr-blurry" style="width: 75%;"/>
     <a class="dropdown-item" @click="logout" href="#" ><font-awesome-icon icon="reply" class="mr-2 text-danger" /> Logout</a>
   </div>
   </div>

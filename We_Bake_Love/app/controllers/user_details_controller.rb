@@ -7,11 +7,12 @@ class UserDetailsController < ApplicationController
 
   def index
     @user_details = UserDetail.where(status: "pending")
-    @user_orderaccepteddetails = UserDetail.where(status: "accepted")
-    @user_ordercancelleddetails = UserDetail.where(status: "cancelled")
+    @grouped_user_details = @user_details.group_by { |user_detail| user_detail.created_at.to_date }
+    render json: { grouped_user_details: @grouped_user_details }, status: :ok
   end
 
   def show
+    binding.pry
     @user_details = UserDetailService.getUserDetailsByID(params[:id])
     @user_details = @user_details.where(status: "pending")
     @user_detail = UserDetailService.getUserDetailByID(params[:id])

@@ -197,14 +197,14 @@ export default {
 </script>
 
 <style scoped>
-.card:hover {
-  box-shadow: 8px 8px 16px 0 rgba(0, 0, 0, 0.2);
-  transform: scale(1.1); /* Enlarge the card on hover */
-}
+  .card:hover {
+    box-shadow: 8px 8px 16px 0 rgba(0, 0, 0, 0.2);
+    transform: scale(1.1); /* Enlarge the card on hover */
+  }
 
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 </style>

@@ -78,7 +78,7 @@
                     </div>
                     <div class="d-flex justify-content-between">
                       <button type="button" class="btn btn-outline-secondary rounded-pill" data-dismiss="modal" @click="close">Close</button>
-                      <button class="btn btn-primary rounded-pill" :disabled="!passwords.old_pass" :data-dismiss="showModal ? 'modal' : ''">Change</button>
+                      <button class="btn btn-primary rounded-pill" :disabled="!passwords.old_pass" id="change">Change</button>
                     </div>
                   </form>
                 </div>
@@ -139,27 +139,25 @@ export default {
     },
     changePass(){
       this.$axios.post('/users/change_password', this.passwords)
-      .then(response => {
-        this.showModal = true
-        // this.$router.push('/sub_pages/profile_update')
-        this.errorMessage = false
-        this.$notify({
-          title: 'Success',
-          text: 'Password changed successfully'
+        .then(response => {
+          this.$router.push('/sub_pages/profile_update')
+          this.close()
+          $('#staticBackdrop').modal('hide');
+          this.errorMessage = false
+          this.$notify({
+            title: 'Success',
+            text: 'Password changed successfully'
+          })
         })
-       
-      })
-      .catch(error => {
-        this.showModal = false
-        console.log(error.response.data)
-        this.errorMessage = true
-        this.errors = error.response.data
-        this.$notify({
-          title: 'Fail',
-          text: 'Something went wrong. Please try again',
-          type: 'warn'
+        .catch(error => {
+          this.errorMessage = true
+          this.errors = error.response.data
+          this.$notify({
+            title: 'Fail',
+            text: 'Something went wrong. Please try again',
+            type: 'warn'
+          })
         })
-      })
     },
     close(){
         this.passwords.old_pass = this.passwords.password = this.passwords.password_confirmation = ''
