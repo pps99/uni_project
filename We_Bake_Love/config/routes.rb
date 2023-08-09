@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   resources :admin_order_lists
   resources :user_details
-  get "/accept", to: "user_details#accept"
-  get "/cancel", to: "user_details#cancel"
+  post "user_details/accept", to: "user_details#accept"
+  get "user_details/cancel", to: "user_details#cancel"
 
   get "carts/show"
   resources :cakes do

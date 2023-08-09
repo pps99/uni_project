@@ -9,12 +9,13 @@ class CakesController < ApplicationController
   end
 
   def create
+    binding.pry
     @cake = Cake.new(cake_params)
     @is_cake_create = CakeService.createCake(@cake)
     if @is_cake_create && @cake.valid?
-      redirect_to home_page_path
+      render json: {}, status: :created
     else
-      render new_cake_path
+      render json: @is_cake_create.errors, status: :unprocessable_entity
     end
   end
  
@@ -69,7 +70,7 @@ class CakesController < ApplicationController
 
   private
   def cake_params
-    params.permit(:image, :name, :description, :price, :type_name).merge(user_id: current_user.id)
+    params.permit(:image, :name, :description, :price, :type_name, :user_id)
   end
 
 end

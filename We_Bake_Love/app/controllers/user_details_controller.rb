@@ -19,16 +19,18 @@ class UserDetailsController < ApplicationController
   end
 
   def accept
-    @user_detail = UserDetail.find(params[:format])
+    binding.pry
+    @user = User.find(params[:user_id])
     @sql = "SET SQL_SAFE_UPDATES = 0;"
     ActiveRecord::Base.connection.execute(@sql)
-    @sql = "update user_details set status='accepted' where user_id =#{@user_detail.user.id} ;"
+    @sql = "update user_details set status='accepted' where user_id =#{@user.id} ;"
+    ActiveRecord::Base.connection.execute(@sql)
+    @sql = "update users set status='accepted' where id=#{@user.id}"
     ActiveRecord::Base.connection.execute(@sql)
     @sql_safe_mode = "SET SQL_SAFE_UPDATES = 1;"
     ActiveRecord::Base.connection.execute(@sql_safe_mode)
-    UserDetailMailer.with(user: @user_detail.user, user_detail: @user_detail).accept_mail.deliver_now
-    Rails.logger.debug(current_user)
-    redirect_to user_details_path
+    UserDetailMailer.with(user: @user).accept_mail.deliver_now
+    render json: {}, status: :ok
   end
   def cancel
     @user_detail = UserDetail.find(params[:format])
@@ -44,7 +46,7 @@ class UserDetailsController < ApplicationController
 
   def create
     @cart_items = JSON.parse(request.body.read)
-
+    @user.update(status: 'pending')
     @cart_items.each do |cart_item|
       @user_detail = UserDetail.new(user_detail_params(cart_item))
       UserDetailService.createUserDetail(@user_detail)

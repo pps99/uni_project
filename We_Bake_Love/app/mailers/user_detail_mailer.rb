@@ -3,11 +3,11 @@ class UserDetailMailer < ApplicationMailer
 
   def accept_mail
     @user = params[:user]
-    mail(to: @user.email, subject: "WeBakeLove Order Confirmaiton - Order \##{@user_detail.id}")
+    mail(to: @user.email, subject: "We Have Accepted Your Order, we will let you know if it's completed")
   end
 
   def cancel_mail
-    mail(to: @user.email, subject: "Cancellation for Order ID \##{@user_detail.id}")
+    mail(to: @user.email, subject: "Sorry, Your Order Got Cancled")
   end
   
   def set_params

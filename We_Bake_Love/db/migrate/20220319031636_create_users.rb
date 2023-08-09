@@ -7,6 +7,7 @@ class CreateUsers < ActiveRecord::Migration[6.1]
       t.string :role, default: "user"
       t.string :phone
       t.text :address
+      t.string :status, default: "nil"
       t.timestamps
     end
   end

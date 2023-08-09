@@ -90,6 +90,7 @@ ActiveRecord::Schema.define(version: 2022_03_31_130900) do
     t.string "role", default: "user"
     t.string "phone"
     t.text "address"
+    t.string "status", default: "nil"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
