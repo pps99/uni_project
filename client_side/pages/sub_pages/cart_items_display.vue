@@ -27,7 +27,16 @@
           <hr class="hr hr-blurry" />
         </a>
         <div class="clearfix">
-          <NuxtLink :to="{ name: 'sub_pages-order_view', params: {cartitems: cart_items}}" class="float-right mt-2 btn btn-outline-info">Order</NuxtLink>
+          <NuxtLink
+            v-if="!shouldDisableLink"
+            :to="{ name: 'sub_pages-order_view', params: { cartitems: cart_items }}"
+            class="float-right mt-2 btn btn-outline-info"
+          >
+            Order
+          </NuxtLink>
+          <button v-else class="float-right mt-2 btn btn-outline-info" disabled>
+            Order
+          </button>
         </div>
       </div>
     </div >
@@ -38,10 +47,11 @@
 export default {
   props: {
     cart_items: [],
+    shouldDisableLink: ''
   },
   data(){
     return {
-      indexToRemove: ''
+      indexToRemove: '',
     }
   },
   methods: {
@@ -49,6 +59,8 @@ export default {
       this.cart_items.splice(index, 1)
     }
   },
+  mounted() {
+  }
 };
 </script>
 <style>

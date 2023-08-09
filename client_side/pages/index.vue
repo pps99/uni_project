@@ -8,7 +8,7 @@
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="search">
             <button class="btn btn-outline-success"  @click.prevent="searchitem()">Search</button>
           </form>
-          <cart_items_display ref="childRef" :cart_items="cart_items" />
+          <cart_items_display ref="childRef" :cart_items="cart_items" :shouldDisableLink="shouldDisableLink" />
         </div>
         <profile_avatar />
       </div>
@@ -69,7 +69,8 @@ export default {
       cart_items: [],
       quantities: [],
       search: '',
-      quantity: ''
+      quantity: '',
+      shouldDisableLink: false
     }
   },
   methods: {
@@ -183,6 +184,22 @@ export default {
     if(localStorage.getItem('cart_items')){
       this.cart_items = JSON.parse(localStorage.getItem('cart_items'))
     }
+    this.$axios.get(`user/`)
+      .then(response => {
+        console.log('user',response.data)
+          if (response.data.user.status == 'pending'){
+            this.shouldDisableLink = true
+          }
+        })
+      .catch(error => {
+          this.$notify({
+            title: 'Fail',
+            text: 'Something went wrong. Please try again',
+            type: 'error'
+          });
+          this.errors = error.response.data.error
+          this.errorMessage = true
+        })
   },
   watch: {
     cart_items: {
