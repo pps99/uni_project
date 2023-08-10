@@ -15,15 +15,15 @@
     </nav>
 
     <ul class="nav nav-tabs mb-5" id="myTab" role="tablist">
-      <li class="nav-item" id="clk" role="" v-for="type_name in type_names" :key="type_name.id" >
-        <button class="nav-link" @click="selectRelatedItems(type_name)" id="type_name" data-toggle="tab" data-target="" type="button" role="tab" aria-controls="" aria-selected="false">{{ type_name }}</button>
+      <li class="nav-item" role="" v-for="type_name in type_names" :key="type_name.id" >
+        <button class="nav-link" @click="selectRelatedItems(type_name)" :id="type_name" data-toggle="tab" data-target="" type="button" role="tab" aria-controls="" >{{ type_name }}</button>
       </li>
     </ul>
 
     <div class="d-flex justify-content-start flex-wrap" style="width: 87.5%; margin: auto;">
       <div v-for="relateditem in relateditems" :key="relateditem.id" class="m-4" >
         <div class="card" style="width: 18rem;">
-          <!-- <img src="..." class="card-img-top" alt="..."> -->
+          <img :src="relateditem.image_url" class="card-img-top img-thumbnail" style="height: 30vh;" alt="relateditem.name">
           <div class="card-body">
             <h5 class="card-title">{{ relateditem.name }}</h5>
             <p class="card-text">{{ relateditem.description }}</p>
@@ -100,8 +100,6 @@ export default {
         return alert("Please Chose an Item");
       }
       let present = false
-      console.log(this.cart_items.length);
-      console.log(this.cart_items)
       const newItem = {
           id: this.cart_items.length + 1,
           cake_id: relateditem.id,
@@ -109,7 +107,6 @@ export default {
           unit_price: relateditem.price,
           quantity: this.quantity
         };
-      console.log(newItem);
       this.cart_items.filter(cart_item => {
         if(cart_item.cake_id == newItem.cake_id)
         {
@@ -127,7 +124,6 @@ export default {
       // this.$refs.childRef.get_all_card_items();
     },
     increment(id) {
-      console.log(id,'id')
       this.quantities.map( quantity => {
         if(quantity.id == id)
         {
@@ -147,7 +143,6 @@ export default {
       this.$axios.post(`/cakes/search?search=${this.search}`)
         .then(response => {
           this.$router.push('#')
-          console.log(response);
           this.type_names = response.data.type_names
           this.items = response.data.items
           this.selectRelatedItems(this.type_names[0])
@@ -186,7 +181,6 @@ export default {
     }
     this.$axios.get(`user/`)
       .then(response => {
-        console.log('user',response.data)
           if (response.data.user.status == 'pending'){
             this.shouldDisableLink = true
           }

@@ -57,7 +57,6 @@ class UsersController < ApplicationController
     #     end
     #   end
     # end
-    binding.pry
     if @user.update(user_params)
       render json: @user, status: 200
     else

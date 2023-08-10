@@ -45,7 +45,6 @@
       async login(){
         await this.$auth.loginWith('local', { data: this.user })
         .then(response => {
-          console.log(response)
           this.$notify({
             title: 'Success',
             text: 'Login successful'

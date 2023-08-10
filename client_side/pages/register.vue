@@ -97,7 +97,6 @@
           this.$router.push('/login')
         })
         .catch(error => {
-          console.log(error.response.data)
           this.errors = error.response.data
           this.errorMessage = true
           this.$notify({

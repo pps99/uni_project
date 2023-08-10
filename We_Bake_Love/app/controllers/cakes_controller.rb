@@ -9,7 +9,6 @@ class CakesController < ApplicationController
   end
 
   def create
-    binding.pry
     @cake = Cake.new(cake_params)
     @is_cake_create = CakeService.createCake(@cake)
     if @is_cake_create && @cake.valid?
@@ -44,20 +43,25 @@ class CakesController < ApplicationController
   end
   
   def import
+    binding.pry
     @cakes = Cake.all
     if params[:file].present?
-    Cake.import(params[:file], current_user.id)
-    redirect_to root_path, notice: "CSV Imported"
+    @cakes = Cake.import(params[:file], logged_in_user.id)
+    render json: {}, status: :created
     else
-    redirect_to new_cakes_path, notice: "You need to choose a file first!"
+      render json: @cakes.errors, status: :unprocessable_entity
     end
   end
 
   def get_items
-    @cake, @type_name = CakeService.getItems
-
-    if @cake.present?
-      render json: { items: @cake, type_names: @type_name }, status: :ok
+    @cakes, @type_name = CakeService.getItems
+    base_url = "#{request.protocol}#{request.host_with_port}"
+    if @cakes.present?
+      cake_data = @cakes.map do |cake|
+        image_url = "#{base_url}#{rails_blob_path(cake.image, only_path: true)}"
+        cake.attributes.merge(image_url: image_url)
+      end
+      render json: { items: cake_data, type_names: @type_name }, status: :ok
     else
       render status: :unprocessable_entity
     end
@@ -70,7 +74,7 @@ class CakesController < ApplicationController
 
   private
   def cake_params
-    params.permit(:image, :name, :description, :price, :type_name, :user_id)
+    params.permit(:image, :name, :description, :price, :type_name).merge(user_id: logged_in_user.id)
   end
 
 end

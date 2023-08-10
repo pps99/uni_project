@@ -56,8 +56,6 @@ export default{
         this.tax = (this.total * percentage) / 100;
       },
       save_order(){
-        console.log("HI")
-        console.log(this.cart_items)
         this.$axios.post(`/user_details`,this.cart_items)
         .then(response => {
           alert("Your Order Have Saved Successfully")

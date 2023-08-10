@@ -127,7 +127,6 @@ export default {
         this.$router.push('/')
       })
       .catch(error => {
-        console.log(error.response.data)
         this.errors = error.response.data
         this.errorMessage = true
         this.$notify({
@@ -171,7 +170,6 @@ export default {
   mounted() {
     this.$axios.get(`/user`)
     .then(response => {
-      console.log(response)
       this.user = response.data.user
     })
   }

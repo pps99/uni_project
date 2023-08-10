@@ -2,6 +2,9 @@ require "csv"
 require "open-uri"
 
 class Cake < ApplicationRecord
+
+  include Rails.application.routes.url_helpers
+
   belongs_to :user, optional: true
   has_one_attached :image, :dependent => :destroy
 
@@ -14,7 +17,9 @@ class Cake < ApplicationRecord
   validates :description, presence: true
   validates :price, presence: true
 
-    def self.import(file,user_id)
+
+  def self.import(file,user_id)
+      binding.pry
       list = []
       CSV.foreach(file.path, :headers => true) do |row| 
         path = Rails.root.join('app', 'assets', 'images', row["image"])
@@ -25,9 +30,10 @@ class Cake < ApplicationRecord
         t.name = row['name']
         t.description = row['description']
         t.price = row['price']
+        t.type_name = row['type_name']
         t.user_id = user_id
         t.save if cake.count == 0
       end
-    end
+  end
      
 end

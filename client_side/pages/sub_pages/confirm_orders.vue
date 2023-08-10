@@ -1,6 +1,6 @@
 <template>
-  <div v-if='nothingtoshow' class="d-flex align-items-center justify-content-center" style="height: 100vh;">
-    <button class="btn btn-link" type="button"  @click="goback()">Nothing To Show Go Back TO Main Page</button>
+  <div v-if="nothingtoshow" class="d-flex align-items-center justify-content-center" style="height: 100vh;">
+          <button class="btn btn-link" type="button"  @click="goback()">Nothing To Show Go Back TO Main Page</button>
   </div>
   <div v-else class="accordion" id="accordionExample">
     <div v-for="groupeditem in groupeditems" :key="groupeditem.id">
@@ -39,13 +39,13 @@
               </table>
               <div class="clear-fix">
                 <button class="float-right" @click="acceptOrder(groupeditem)">Accept Order</button>
-                <button class="float-left">Cancel Order</button>
+                <button class="float-left" @click="cancelOrder(groupeditem)">Cancel Order</button>
               </div>
             </div>
           </div>
         </div>
-      </div>
     </div>
+  </div>
 </template>
 <script>
 export default{
@@ -62,8 +62,11 @@ export default{
     fetch_related_items() {
       this.$axios.get(`/user_details`)
         .then(response => {
-          this.$router.push('#')
           this.groupeditems = response.data.grouped_user_details
+          if( this.groupeditems.length == 0)
+          {
+            this.nothingtoshow = true
+          }
         })
         .catch(error => {
           this.$notify({
@@ -83,6 +86,29 @@ export default{
       this.$axios.post(`/user_details/accept?user_id=${groupeditem[0].user_id}&create_at=${groupeditem[0].created_at}`)
         .then(response => {
           this.groupeditems = response.data.grouped_user_details
+          if( this.groupeditems.length == 0)
+          {
+            this.nothingtoshow = true
+          }
+        })
+        .catch(error => {
+          this.$notify({
+            title: 'Fail',
+            text: 'Something went wrong. Please try again',
+            type: 'error'
+          });
+          this.errors = error.response.data.error
+          this.errorMessage = true
+        })
+    },
+    cancelOrder(groupeditem){
+      this.$axios.post(`/user_details/cancel?user_id=${groupeditem[0].user_id}&create_at=${groupeditem[0].created_at}`)
+        .then(response => {
+          this.groupeditems = response.data.grouped_user_details
+          if( this.groupeditems.length == 0)
+          {
+            this.nothingtoshow = true
+          }
         })
         .catch(error => {
           this.$notify({
@@ -101,10 +127,6 @@ export default{
   },
   mounted() {
     this.fetch_related_items()
-    if(this.groupeditems.length == 0)
-    {
-      this.nothingtoshow = true
-    }
   }
 }
 

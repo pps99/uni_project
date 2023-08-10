@@ -63,7 +63,6 @@
       save_reset_password(){
         this.$axios.post(`/password/reset_save`,this.user)
         .then(response => {
-          console.log(response)
           this.$notify({
             title: 'Success',
             text: 'Login successful'
@@ -77,7 +76,6 @@
             text: 'Something went wrong. Please try again',
             type: 'error'
           });
-          console.log(error.response.data.error)
           this.errors = error.response.data.error
           this.errorMessage = true
         })

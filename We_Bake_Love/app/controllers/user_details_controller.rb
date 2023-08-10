@@ -7,19 +7,23 @@ class UserDetailsController < ApplicationController
 
   def index
     @user_details = UserDetail.where(status: "pending")
-    @grouped_user_details = @user_details.group_by { |user_detail| user_detail.created_at.to_date }
-    render json: { grouped_user_details: @grouped_user_details }, status: :ok
+    binding.pry
+    if @user_details.present? 
+          @grouped_user_details = @user_details.group_by { |user_detail| user_detail.user_id }
+          render json: { grouped_user_details: @grouped_user_details }, status: :ok
+    else
+          render json: { grouped_user_details: []}, status: :ok
+    end
+
   end
 
   def show
-    binding.pry
     @user_details = UserDetailService.getUserDetailsByID(params[:id])
     @user_details = @user_details.where(status: "pending")
     @user_detail = UserDetailService.getUserDetailByID(params[:id])
   end
 
-  def accept
-    binding.pry
+  def accept    
     @user = User.find(params[:user_id])
     @sql = "SET SQL_SAFE_UPDATES = 0;"
     ActiveRecord::Base.connection.execute(@sql)
@@ -33,15 +37,17 @@ class UserDetailsController < ApplicationController
     render json: {}, status: :ok
   end
   def cancel
-    @user_detail = UserDetail.find(params[:format])
+    @user = User.find(params[:user_id])
     @sql = "SET SQL_SAFE_UPDATES = 0;"
     ActiveRecord::Base.connection.execute(@sql)
-    @sql = "update user_details set status='cancelled' where user_id =#{@user_detail.user.id} ;"
+    @sql = "update user_details set status='cancelled' where user_id =#{@user.id}  ;"
+    ActiveRecord::Base.connection.execute(@sql)
+    @sql = "update users set status='cancled' where id=#{@user.id}"
     ActiveRecord::Base.connection.execute(@sql)
     @sql_safe_mode = "SET SQL_SAFE_UPDATES = 1;"
     ActiveRecord::Base.connection.execute(@sql_safe_mode)
-    UserDetailMailer.with(user: @user_detail.user, user_detail: @user_detail).cancel_mail.deliver_now
-    redirect_to user_details_path
+    UserDetailMailer.with(user: @user).cancel_mail.deliver_now
+    render json: {}, status: :ok
   end
 
   def create
