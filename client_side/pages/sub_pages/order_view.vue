@@ -13,7 +13,15 @@
         <tbody>
             <tr v-for="cart_item in cart_items" :key="cart_item.id">
             <td style="text-align: center;">{{ cart_item.cake_name }}</td>
-            <td style="text-align: center;">{{ cart_item.quantity }}</td>
+            <td style="text-align: center;" >
+              <button @click="decrement(cart_item)" class="px-2 mr-2" style=" background-color: transparent !important; border: none; ">
+                  <b-icon icon="dash" aria-hidden="true"></b-icon> 
+              </button> 
+              {{ cart_item.quantity }}
+              <button @click="increment(cart_item)" class="px-2 ml-2" style=" background-color: transparent !important; border: none; ">
+                  <b-icon icon="plus" aria-hidden="true"></b-icon> 
+              </button> 
+            </td>
             <td style="text-align: center;">{{ cart_item.unit_price * cart_item.quantity }}</td>
             </tr>
             <tr>
@@ -31,6 +39,7 @@
         </tbody>
         </table>
         <button class="float-right mt-2 btn btn-outline-info" @click="save_order">Confirm Order</button>
+        <button class="float-left mt-2 btn btn-outline-dark" @click="back">Back</button>
       </div>
     </div>
   </div>
@@ -41,11 +50,12 @@ export default{
         return{
            cart_items: [],
            total: 0,
-           tax: 0,
+           tax: 0
         }
     },
     methods: {
       total_price(){
+        this.total = 0
         this.cart_items.map( cart_item => {
           this.total += parseInt(cart_item.unit_price * cart_item.quantity)
         })
@@ -72,6 +82,23 @@ export default{
           this.errors = error.response.data.error
           this.errorMessage = true
         })
+      },
+      increment(cart_item){
+        cart_item.quantity++;
+        this.total_price(),
+        this.tax_price()
+      },
+      decrement(cart_item){
+        if(cart_item.quantity <= 1)
+        { cart_item.quantity = 1 }
+        else{
+          cart_item.quantity--;
+          this.total_price(),
+          this.tax_price()
+        }        
+      },
+      back() {
+        this.$router.back();
       }
     },
     mounted() {

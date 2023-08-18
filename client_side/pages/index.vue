@@ -27,7 +27,7 @@
           <div class="card-body">
             <h5 class="card-title">{{ relateditem.name }}</h5>
             <p class="card-text">{{ relateditem.description }}</p>
-            <p class="card-text">{{ relateditem.price }}</p>
+            <p class="card-text">MMK {{ relateditem.price }}</p>
             <div style="width: 60%;" class="d-flex">
               <button @click="decrement(relateditem.id)" class="rounded-circle px-2 mr-2">
                   <b-icon icon="dash" aria-hidden="true"></b-icon> 

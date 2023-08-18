@@ -20,7 +20,7 @@
                 {{ cart_item.unit_price * cart_item.quantity }}
               </span>
             </div>
-            <button id="delete-icon" class="float-right" @click="delete_an_item(index)">
+            <button id="delete-icon" class="float-right" @click="delete_an_item(cart_item)">
                 <b-icon icon="trash" aria-hidden="true" style="color: red;"></b-icon>
             </button>
           </div>
@@ -55,8 +55,11 @@ export default {
     }
   },
   methods: {
-    delete_an_item(index){
-      this.cart_items.splice(index, 1)
+    delete_an_item(itemToDelete){
+      const index = this.cart_items.indexOf(itemToDelete);
+      if (index !== -1) {
+        this.cart_items.splice(index, 1);
+      }
     }
   },
   mounted() {
