@@ -43,7 +43,6 @@ class CakesController < ApplicationController
   end
   
   def import
-    binding.pry
     @cakes = Cake.all
     if params[:file].present?
     @cakes = Cake.import(params[:file], logged_in_user.id)
@@ -68,8 +67,17 @@ class CakesController < ApplicationController
   end
 
   def search
-    @cake, @type_name = CakeService.search(params[:search])
-    render json: { items: @cake, type_names: @type_name }, status: :ok
+    @cakes, @type_name = CakeService.search(params[:search])
+    base_url = "#{request.protocol}#{request.host_with_port}"
+    if @cakes.present?
+      cake_data = @cakes.map do |cake|
+        image_url = "#{base_url}#{rails_blob_path(cake.image, only_path: true)}"
+        cake.attributes.merge(image_url: image_url)
+      end
+      render json: { items: cake_data, type_names: @type_name }, status: :ok
+    else
+      render status: :unprocessable_entity
+    end
   end
 
   private

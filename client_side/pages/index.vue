@@ -2,7 +2,7 @@
   <div class="">
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
+        <a class="navbar-brand" href="#">CakeShop</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent"> 
           <form class="d-flex">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="search">
@@ -15,8 +15,20 @@
     </nav>
 
     <ul class="nav nav-tabs mb-5" id="myTab" role="tablist">
-      <li class="nav-item" role="" v-for="type_name in type_names" :key="type_name.id" >
-        <button class="nav-link" @click="selectRelatedItems(type_name)" :id="type_name" data-toggle="tab" data-target="" type="button" role="tab" aria-controls="" >{{ type_name }}</button>
+      <li class="nav-item" role="" v-for="type_name in type_names" :key="type_name.id">
+        <button
+          class="nav-link"
+          @click="selectRelatedItems(type_name)"
+          :id="type_name"
+          data-toggle="tab"
+          data-target=""
+          type="button"
+          role="tab"
+          aria-controls=""
+          :class="{ active: type_name === activeNavItem }"
+        >
+          {{ type_name }}
+        </button>
       </li>
     </ul>
 
@@ -70,7 +82,8 @@ export default {
       quantities: [],
       search: '',
       quantity: '',
-      shouldDisableLink: false
+      shouldDisableLink: false,
+      activeNavItem: ''
     }
   },
   methods: {
@@ -166,6 +179,9 @@ export default {
           this.items = response.data.items
           this.type_names = response.data.type_names
           this.selectRelatedItems(this.type_names[0])
+          if (this.type_names.length > 0) {
+            this.activeNavItem = this.type_names[0];
+          }
         })
         .catch(error => {
           this.$notify({
@@ -194,6 +210,7 @@ export default {
           this.errors = error.response.data.error
           this.errorMessage = true
         })
+
   },
   watch: {
     cart_items: {

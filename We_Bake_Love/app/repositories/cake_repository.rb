@@ -27,10 +27,11 @@ class CakeRepository
     end
 
     def search(value)
-      @cake =  Cake.where("name LIKE :search",search: "%#{value}%")
-      @type_names = @cake.pluck(:type_name).uniq
-      [@cake, @type_names]
+      @cakes =  Cake.where("name LIKE :search",search: "%#{value}%")
+      @type_names = @cakes.pluck(:type_name).uniq
+      [@cakes, @type_names]
     end
+
     def getCakeByType(type_name)
       @cake = Cake.where(type_name: type_name)
     end

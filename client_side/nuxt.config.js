@@ -111,10 +111,14 @@ export default {
 
   generate: {
     routes: [
-      '/passwordreset'
+      '/passwordreset',
+      '/forgotpassword'
     ],
   },
   'passwordreset': {
     middleware: false,
   },
+  'forgotpassword': {
+    middleware: false,
+  }
 }

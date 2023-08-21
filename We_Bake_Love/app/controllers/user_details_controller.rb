@@ -7,7 +7,6 @@ class UserDetailsController < ApplicationController
 
   def index
     @user_details = UserDetail.where(status: "pending")
-    binding.pry
     if @user_details.present? 
           @grouped_user_details = @user_details.group_by { |user_detail| user_detail.user_id }
           render json: { grouped_user_details: @grouped_user_details }, status: :ok
@@ -77,8 +76,10 @@ class UserDetailsController < ApplicationController
       price: cart_item['unit_price'],
       total: (cart_item['quantity'] * cart_item['unit_price']),
       user_id: @user.id,
-      phone: '09780662858',
-      address: '21st street'
+      name: @user.name,
+      phone: @user.phone,
+      address: @user.address,
+      option: cart_item['option']
     }
   end
 end

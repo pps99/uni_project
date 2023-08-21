@@ -8,9 +8,9 @@
         <div class="card-header rounded-pill" id="headingOne">
           <h2 class="mb-0">
             <span>
-              Order_No: 
+              Order_No: 1
             </span>
-            <span>Status: {{ groupeditem[0].status }}</span>
+            <span>Option: {{ groupeditem[0].option }}</span>
             <span>
               <button class="btn btn-link" type="button" data-toggle="collapse" :data-target="'#collapse-' + groupeditem[0].id" aria-expanded="true" :aria-controls="'collapse-' + groupeditem[0].id" @click="openModalWithData(groupeditem)">
                 Order Detail
@@ -20,7 +20,10 @@
         </div>
 
         <div :id="'collapse-' + groupeditem[0].id" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-          <div class="card-body" style="width: 18rem;">
+          <div class="card-body" style="width: 28rem;">
+            <h5>Customer Name:  {{ groupeditem[0].name}}</h5>
+            <h5>Phone:  {{ groupeditem[0].phone }}</h5>
+            <h5>Address:  {{ groupeditem[0].address }}</h5>
             <table class="table">
               <thead>
               <tr>

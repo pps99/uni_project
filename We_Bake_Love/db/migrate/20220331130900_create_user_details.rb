@@ -1,6 +1,7 @@
 class CreateUserDetails < ActiveRecord::Migration[6.1]
   def change
     create_table :user_details do |t|
+      t.string :name
       t.string :phone
       t.string :address
       t.integer :user_id
@@ -9,6 +10,7 @@ class CreateUserDetails < ActiveRecord::Migration[6.1]
       t.string :quantity
       t.integer :price
       t.string :status, default: "pending"
+      t.string :option
       t.timestamps
     end
   end

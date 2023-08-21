@@ -14,15 +14,13 @@ class Cake < ApplicationRecord
 
   validates :name, presence: true
   validates :image, presence: true
-  validates :description, presence: true
   validates :price, presence: true
 
 
   def self.import(file,user_id)
-      binding.pry
       list = []
       CSV.foreach(file.path, :headers => true) do |row| 
-        path = Rails.root.join('app', 'assets', 'images', row["image"])
+        path = Rails.root.join('public', 'images', row["image"])
         file = open(path)
         cake =  Cake.where(name: row['name'])
         t = Cake.new

@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 2022_03_31_130900) do
   end
 
   create_table "user_details", charset: "utf8mb3", force: :cascade do |t|
+    t.string "name"
     t.string "phone"
     t.string "address"
     t.integer "user_id"
@@ -79,6 +80,7 @@ ActiveRecord::Schema.define(version: 2022_03_31_130900) do
     t.string "quantity"
     t.integer "price"
     t.string "status", default: "pending"
+    t.string "option"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

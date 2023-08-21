@@ -38,8 +38,16 @@
             </tr>
         </tbody>
         </table>
-        <button class="float-right mt-2 btn btn-outline-info" @click="save_order">Confirm Order</button>
-        <button class="float-left mt-2 btn btn-outline-dark" @click="back">Back</button>
+        <label>
+            <input type="radio" v-model="selectedOption" value="cash_on_deli"> Cash On Delivery
+        </label>
+        <label>
+            <input type="radio" v-model="selectedOption" value="pick_up"> Pick Up
+        </label>
+        <div class="clear-fix">
+          <button class="float-left mt-2 btn btn-outline-dark" @click="back">Back</button>
+          <button class="float-right mt-2 btn btn-outline-info" @click="save_order">Confirm Order</button>
+        </div>
       </div>
     </div>
   </div>
@@ -50,7 +58,8 @@ export default{
         return{
            cart_items: [],
            total: 0,
-           tax: 0
+           tax: 0,
+           selectedOption: ''
         }
     },
     methods: {
@@ -66,6 +75,9 @@ export default{
         this.tax = (this.total * percentage) / 100;
       },
       save_order(){
+        this.cart_items.map(cart_item =>{
+          cart_item['option'] = this.selectedOption
+        })
         this.$axios.post(`/user_details`,this.cart_items)
         .then(response => {
           alert("Your Order Have Saved Successfully")
@@ -83,21 +95,7 @@ export default{
           this.errorMessage = true
         })
       },
-      increment(cart_item){
-        cart_item.quantity++;
-        this.total_price(),
-        this.tax_price()
-      },
-      decrement(cart_item){
-        if(cart_item.quantity <= 1)
-        { cart_item.quantity = 1 }
-        else{
-          cart_item.quantity--;
-          this.total_price(),
-          this.tax_price()
-        }        
-      },
-      back() {
+      back(){
         this.$router.back();
       }
     },
