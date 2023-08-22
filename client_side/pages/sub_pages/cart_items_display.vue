@@ -11,10 +11,10 @@
           <div class="clearfix">
             <div class="float-left">
               <span>
-                {{ cart_item.quantity }}
+                {{ cart_item.cake_name }}
               </span>
               <span>
-                {{ cart_item.cake_name }}
+                {{ cart_item.quantity }}
               </span>
               <span>
                 {{ cart_item.unit_price * cart_item.quantity }}
@@ -27,19 +27,29 @@
           <hr class="hr hr-blurry" />
         </a>
         <div class="clearfix">
-          <NuxtLink
-            v-if="!shouldDisableLink"
-            :to="{ name: 'sub_pages-order_view', params: { cartitems: cart_items }}"
-            class="float-right mt-2 btn btn-outline-info"
-          >
-            Order
-          </NuxtLink>
+          <button v-if="!shouldDisableLink" class="float-right mt-2 btn btn-outline-info" @click="confirm">Order</button>
           <button v-else class="float-right mt-2 btn btn-outline-info" disabled>
             Order
           </button>
         </div>
       </div>
     </div >
+        <!-- Modal for alert -->
+    <div class="modal" id="alertModal">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Alert</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Please log in first to place an order.
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -47,7 +57,8 @@
 export default {
   props: {
     cart_items: [],
-    shouldDisableLink: ''
+    shouldDisableLink: '',
+    amount: 0
   },
   data(){
     return {
@@ -59,6 +70,15 @@ export default {
       const index = this.cart_items.indexOf(itemToDelete);
       if (index !== -1) {
         this.cart_items.splice(index, 1);
+      }
+    },
+    confirm(){
+      if(this.$auth.loggedIn){
+        this.$router.push({ name: 'sub_pages-order_view', params: { amount: this.amount }});
+      }else{
+        // Show the alert modal
+        const alertModal = document.getElementById('alertModal');
+        $(alertModal).modal('show');
       }
     }
   },

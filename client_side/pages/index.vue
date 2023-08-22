@@ -8,9 +8,10 @@
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="search">
             <button class="btn btn-outline-success"  @click.prevent="searchitem()">Search</button>
           </form>
-          <cart_items_display ref="childRef" :cart_items="cart_items" :shouldDisableLink="shouldDisableLink" />
+          <cart_items_display ref="childRef" :cart_items="cart_items" :shouldDisableLink="shouldDisableLink" :amount="amount" />
         </div>
-        <profile_avatar />
+        <profile_avatar v-if="$auth.loggedIn" :amount="amount" />
+        <button v-else class="float-right mt-2 btn btn-outline-info" @click="loggedIn"> Log In </button>
       </div>
     </nav>
 
@@ -68,6 +69,7 @@ import { BootstrapVueIcons } from 'bootstrap-vue'
 import cart_items_display from './sub_pages/cart_items_display.vue'
 import profile_avatar from './sub_pages/profile_avatar.vue'
 export default {
+  auth: 'guest',
   components: {
     BootstrapVueIcons,
     cart_items_display,
@@ -83,17 +85,21 @@ export default {
       search: '',
       quantity: '',
       shouldDisableLink: false,
-      activeNavItem: ''
+      activeNavItem: '',
+      amount: 0
     }
   },
   methods: {
+    loggedIn(){
+      this.$router.push('/login');
+    },
     async logout(){
       await this.$auth.logout();
       this.$notify({
           title: 'Success',
           text: 'Logout successful',
         });
-      this.$router.push('/login')
+      this.$router.push('/')
     },
     url(image){
       return `http://127.0.0.1:8080${image}`
@@ -195,13 +201,29 @@ export default {
     if(localStorage.getItem('cart_items')){
       this.cart_items = JSON.parse(localStorage.getItem('cart_items'))
     }
-    this.$axios.get(`user/`)
-      .then(response => {
-          if (response.data.user.status == 'pending'){
-            this.shouldDisableLink = true
-          }
-        })
-      .catch(error => {
+    if(this.$auth.loggedIn)
+    {
+      this.$axios.get(`user/`)
+        .then(response => {
+            if (response.data.user.status == 'pending'){
+              this.shouldDisableLink = true
+            }
+          })
+        .catch(error => {
+            this.$notify({
+              title: 'Fail',
+              text: 'Something went wrong. Please try again',
+              type: 'error'
+            });
+            this.errors = error.response.data.error
+            this.errorMessage = true
+          })
+      if (this.$auth.user.user.role != "admin") {
+        this.$axios.post(`getAmount?user_id=${this.$auth.user.user.id}`)
+          .then(response => {
+            this.amount = response.data.amount;
+          })
+          .catch(error => {
           this.$notify({
             title: 'Fail',
             text: 'Something went wrong. Please try again',
@@ -210,7 +232,8 @@ export default {
           this.errors = error.response.data.error
           this.errorMessage = true
         })
-
+      }
+    }
   },
   watch: {
     cart_items: {
@@ -225,10 +248,10 @@ export default {
 </script>
 
 <style scoped>
-  .card:hover {
+  /* .card:hover {
     box-shadow: 8px 8px 16px 0 rgba(0, 0, 0, 0.2);
     transform: scale(1.1); /* Enlarge the card on hover */
-  }
+  /* } */ 
 
   input[type=number]::-webkit-inner-spin-button,
   input[type=number]::-webkit-outer-spin-button {
