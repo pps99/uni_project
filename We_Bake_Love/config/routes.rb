@@ -11,6 +11,10 @@ Rails.application.routes.draw do
 
   resources :cart_items
   resource :carts
+  resources :transitions
+  resources :orders
+  resources :order_details
+
 
   root "home_page#index"
   # Home
@@ -40,6 +44,7 @@ Rails.application.routes.draw do
   post "password/reset_save", to: "password_resets#update"
 
   get '/items', to: "cakes#get_items"
+  post '/getAmount', to: "transitions#getAmount"
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

@@ -14,6 +14,8 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     @is_user_create = UserService.createUser(@user)
     if @is_user_create
+      @transition = Transition.new(user_id: @user.id)
+      @create_transition = TransitionService.createTransition(@transition)
       token = encode_token({ user_id: @user.id })
       render json: { user: @user, token: token }, status: :created
     else

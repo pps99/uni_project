@@ -1,5 +1,5 @@
 class CakesController < ApplicationController
-
+  before_action :authorized, except: [:get_items, :search]
   def index
     @cakes = CakeService.getAllCakes
   end
@@ -62,7 +62,7 @@ class CakesController < ApplicationController
       end
       render json: { items: cake_data, type_names: @type_name }, status: :ok
     else
-      render status: :unprocessable_entity
+      render json: { items: [], type_names: [] }, status: :ok
     end
   end
 

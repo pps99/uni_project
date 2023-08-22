@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_31_130900) do
+ActiveRecord::Schema.define(version: 2023_08_22_044114) do
 
   create_table "active_storage_attachments", charset: "utf8mb3", force: :cascade do |t|
     t.string "name", null: false
@@ -66,6 +66,34 @@ ActiveRecord::Schema.define(version: 2022_03_31_130900) do
   create_table "carts", charset: "utf8mb3", force: :cascade do |t|
     t.decimal "subtotal", precision: 10
     t.decimal "total", precision: 10
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "order_details", charset: "utf8mb3", force: :cascade do |t|
+    t.integer "order_id"
+    t.string "cake_name"
+    t.string "quantity"
+    t.integer "price"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "orders", charset: "utf8mb3", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "name"
+    t.string "phone"
+    t.string "address"
+    t.integer "total"
+    t.string "option"
+    t.string "status", default: "pending"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "transitions", charset: "utf8mb3", force: :cascade do |t|
+    t.string "user_id"
+    t.string "amount", default: "0"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
