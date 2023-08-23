@@ -1,45 +1,45 @@
 <template>
   <div>
-    <Notifications style="margin-top:60px;" />
+    <Notifications style="margin-top: 60px;" />
     <div class="d-flex align-items-center justify-content-center" style="height: 100vh;">
       <div class="card w-50 m-auto shadow">
         <div class="card-body">
           <h3 class="my-3 col-lg-6 col-12 m-auto">Update Account</h3>
           <form class="col-lg-6 col-12 m-auto" @submit.prevent="update">
             <div class="form-group mt-4">
-              <label>Name</label>
-              <input type="text" class="form-control" v-model="user.name" >
+              <label for="name">Name</label>
+              <input type="text" class="form-control" id="name" v-model="user.name">
               <div v-if="errorMessage">
-                  <span class="text-danger" v-for="error in errors.name" :key="error"> Name {{ error }}</span>
-                </div>
+                <span class="text-danger" v-for="error in errors.name" :key="error"> Name {{ error }}</span>
+              </div>
             </div>
             <div class="form-group">
-              <label>Email address</label>
-              <input type="text" class="form-control" v-model="user.email">
+              <label for="email">Email address</label>
+              <input type="text" class="form-control" id="email" v-model="user.email">
               <div v-if="errorMessage">
-                  <span class="text-danger" v-for="error in errors.email" :key="error"> Email {{ error }}</span>
-                </div>
+                <span class="text-danger" v-for="error in errors.email" :key="error"> Email {{ error }}</span>
+              </div>
             </div>
             <div class="form-group mt-4">
-              <a href="javascript:void(0)" data-toggle="modal" data-target="#staticBackdrop">Change Password</a>
+              <a href="#" data-toggle="modal" data-target="#staticBackdrop">Change Password</a>
             </div>
             <div class="form-group mt-4">
-              <label>Phone No</label>
-              <input type="text" class="form-control" v-model="user.phone">
+              <label for="phone">Phone No</label>
+              <input type="text" class="form-control" id="phone" v-model="user.phone">
               <div v-if="errorMessage">
-                  <span class="text-danger" v-for="error in errors.phone" :key="error"> Phone {{ error }}</span>
-                </div>
+                <span class="text-danger" v-for="error in errors.phone" :key="error"> Phone {{ error }}</span>
+              </div>
             </div>
             <div class="form-group mt-4">
-              <label>Address</label>
-              <input type="text" class="form-control" v-model="user.address">
+              <label for="address">Address</label>
+              <input type="text" class="form-control" id="address" v-model="user.address">
               <div v-if="errorMessage">
-                  <span class="text-danger" v-for="error in errors.address" :key="error"> Address {{ error }}</span>
-                </div>
+                <span class="text-danger" v-for="error in errors.address" :key="error"> Address {{ error }}</span>
+              </div>
             </div>
             <div class="clearfix">
-                <button @click="back" class="float-left btn btn-outline-dark">back</button>
-                <button type="submit" class="float-right btn btn-outline-primary">submit</button>
+              <button @click="back" class="float-left btn btn-outline-dark">Back</button>
+              <button type="submit" class="float-right btn btn-outline-primary">Submit</button>
             </div>
           </form>
 
@@ -90,7 +90,6 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script>

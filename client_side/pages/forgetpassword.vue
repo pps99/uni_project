@@ -1,13 +1,12 @@
 <template>
-    <div>
-      <div class="d-flex align-items-center justify-content-center" style="height: 100vh;">
-        <div class="card w-50 m-auto shadow">
+      <div class="login-container d-flex align-items-center justify-content-end">
+        <div class="card login-card shadow">
           <div class="card-body">
-            <h3 class="my-3 col-lg-6 col-12 m-auto">Reset Password</h3>
-            <form @submit.prevent="reset_password" class="col-lg-6 col-12 m-auto">
-              <div class="form-group mt-5">
+            <h3 class="card-title text-center mb-4">Reset Password</h3>
+            <form @submit.prevent="reset_password" class="login-form">
+              <div class="form-group">
                 <label>Email address</label>
-                <input type="email" class="form-control" v-model="user.email">
+                <input type="email" class="form-control reduced-opacity-input" v-model="user.email">
                 <div v-if="errorMessage">
                     <span class="text-danger"> {{ errors.error_res }}</span>
                 </div>
@@ -21,17 +20,15 @@
           </div>
         </div>
       </div>
-    </div>
   </template>
-  
-  <script>
+<script>
   export default {
     auth: false,
     data(){
       return {
-         user:{
-           email : ''
-         },
+          user:{
+            email : ''
+          },
         errors: {},
         errorMessage: false
       }
@@ -63,5 +60,30 @@
       }
     }
   }
-  </script>
-  
+</script>
+<style scoped>
+  .login-container {
+    height: 100vh;
+    background-image: url('../assets/backery_img.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding-left: 30%;
+  }
+
+  .login-form {
+  padding: 20px;
+}
+
+.login-card {
+  width: 400px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 25px;
+}
+
+
+.reduced-opacity-input {
+  opacity: 0.6; /* Adjust the opacity value as needed */
+}
+
+</style> 

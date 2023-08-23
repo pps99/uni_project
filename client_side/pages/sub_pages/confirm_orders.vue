@@ -5,26 +5,26 @@
   <div v-else class="accordion" id="accordionExample">
     <div v-for="order in pending_orders_with_details" :key="order.id">
       <div class="card d-flex align-items-center justify-content-center mt-4" style="border: none;">
-        <div class="card-header rounded-pill" id="headingOne">
-          <h2 class="mb-0">
+        <div class="card-header rounded-pill bg-info"  id="headingOne">
+          <h5 class="mb-0">
             <span>
               Order_No: {{ order['order'].id }} <!-- Display actual order number here -->
             </span>
             <span class="ml-3">Option: {{ order['order'].option }}</span>
             <span class="ml-3">Total: {{ order['order'].total }} MMK</span>
             <span>
-              <button class="btn btn-link" type="button" data-toggle="collapse" :data-target="'#collapse-' + order['order'].id" aria-expanded="true" :aria-controls="'collapse-' + order['order'].id" @click="openModalWithData(order['order'])">
+              <button class="btn btn-light" type="button" data-toggle="collapse" :data-target="'#collapse-' + order['order'].id" aria-expanded="true" :aria-controls="'collapse-' + order['order'].id" @click="openModalWithData(order['order'])">
                 Order Detail
               </button>
             </span>
-          </h2>
+          </h5>
         </div>
 
-        <div :id="'collapse-' + order['order'].id" class="collapse " aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div :id="'collapse-' + order['order'].id" class="collapse shadow" aria-labelledby="headingOne" data-parent="#accordionExample">
           <div class="card-body" style="width: 28rem;">
-            <h5>Customer Name: &nbsp;&nbsp;&nbsp;{{ order['order'].name }}</h5>
-            <h5>Phone: &nbsp;&nbsp;&nbsp;{{ order['order'].phone }}</h5>
-            <h5>Address: &nbsp;&nbsp;&nbsp;{{ order['order'].address }}</h5>
+            <h6>Customer Name: &nbsp;&nbsp;&nbsp;{{ order['order'].name }}</h6>
+            <h6>Phone: &nbsp;&nbsp;&nbsp;{{ order['order'].phone }}</h6>
+            <h6>Address: &nbsp;&nbsp;&nbsp;{{ order['order'].address }}</h6>
             <table class="table">
               <thead>
                 <tr>
@@ -39,10 +39,37 @@
                 </tr>
               </tbody>
             </table>
-            <div class="clear-fix">
-              <button class="float-right" @click="acceptOrder(order)">Accept Order</button>
-              <button class="float-left" @click="cancelOrder(order)">Cancel Order</button>
+            <div class="clear-fix pb-4">
+              <button class="float-right btn btn-success" @click="acceptOrder(order)">Accept Order</button>
+              <button class="float-left btn btn-danger" href="javascript:void(0)" data-toggle="modal" data-target="#staticBackdrop">Cancel Order</button>
             </div>
+
+          <!-- Modal -->
+          <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="staticBackdropLabel">Add A Description Why You Cancel Order</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form action="" @submit.prevent="cancelOrder(order)">
+                    <div class="form-group">
+                      <label for="description">Description:</label>
+                      <textarea class="form-control" id="description" v-model="description"></textarea>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <button type="button" class="btn btn-outline-secondary rounded-pill" data-dismiss="modal" @click="close">Close</button>
+                      <button class="btn btn-primary rounded-pill btn btn-danger">cancelOrder</button>
+                    </div>
+                  </form>
+                </div>
+                
+              </div>
+            </div>
+          </div>
           </div>
         </div>
       </div>
@@ -56,6 +83,7 @@ export default {
     return {
       pending_orders_with_details: [],
       nothingtoshow: false,
+      description: '',
     }
   },
   methods: {
@@ -82,14 +110,51 @@ export default {
       this.showContent = !this.showContent;
     },
     acceptOrder(order) {
-      // Your accept order logic here
+      console.log(order['order'])
+      this.$axios.post(`/orders/accept?order_id=${order['order'].id}&user_id=${order['order'].user_id}`)
+        .then(response => {
+          if( this.pending_orders_with_details.length === 0)
+          {
+            this.nothingtoshow = true
+          }
+          window.location.reload();
+        })
+        .catch(error => {
+          this.$notify({
+            title: 'Fail',
+            text: 'Something went wrong. Please try again',
+            type: 'error'
+          });
+          this.errors = error.response.data.error
+          this.errorMessage = true
+        })
     },
     cancelOrder(order) {
-      // Your cancel order logic here
+      this.$axios.post(`/orders/cancel?order_id=${order['order'].id}&user_id=${order['order'].user_id}&description=${this.description}`)
+        .then(response => {
+          if( this.pending_orders_with_details.length === 0)
+          {
+            this.nothingtoshow = true
+          }
+          window.location.reload();
+        })
+        .catch(error => {
+          this.$notify({
+            title: 'Fail',
+            text: 'Something went wrong. Please try again',
+            type: 'error'
+          });
+          this.errors = error.response.data.error
+          this.errorMessage = true
+        })
     },
     goback() {
       this.$router.push('/');
     },
+    close(){
+        this.description = ''
+        this.errorMessage = false
+    }
   },
   mounted() {
     this.fetch_related_items();

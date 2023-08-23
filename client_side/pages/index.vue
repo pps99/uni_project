@@ -6,7 +6,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent"> 
           <form class="d-flex">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="search">
-            <button class="btn btn-outline-success"  @click.prevent="searchitem()">Search</button>
+            <button class="btn btn-outline-success ml-2"  @click.prevent="searchitem()">Search</button>
           </form>
           <cart_items_display ref="childRef" :cart_items="cart_items" :shouldDisableLink="shouldDisableLink" :amount="amount" />
         </div>
@@ -33,34 +33,30 @@
       </li>
     </ul>
 
-    <div class="d-flex justify-content-start flex-wrap" style="width: 87.5%; margin: auto;">
-      <div v-for="relateditem in relateditems" :key="relateditem.id" class="m-4" >
-        <div class="card" style="width: 18rem;">
-          <img :src="relateditem.image_url" class="card-img-top img-thumbnail" style="height: 30vh;" alt="relateditem.name">
+    <div class="card-container d-flex flex-nowrap overflow-auto">
+      <div v-for="relateditem in relateditems" :key="relateditem.id" class="m-4 card-wrapper">
+        <div class="card">
+          <img :src="relateditem.image_url" class="card-img-top img-thumbnail" :alt="relateditem.name">
           <div class="card-body">
             <h5 class="card-title">{{ relateditem.name }}</h5>
-            <p class="card-text">{{ relateditem.description }}</p>
-            <p class="card-text">MMK {{ relateditem.price }}</p>
-            <div style="width: 60%;" class="d-flex">
-              <button @click="decrement(relateditem.id)" class="rounded-circle px-2 mr-2">
-                  <b-icon icon="dash" aria-hidden="true"></b-icon> 
-              </button> 
+            <p class="card-text description">{{ relateditem.description }}</p>
+            <p class="card-text price">MMK {{ relateditem.price }}</p>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <button @click="decrement(relateditem.id)" class="btn btn-light rounded-circle">
+                <b-icon icon="dash" aria-hidden="true"></b-icon>
+              </button>
               <div v-for="quantity in quantities" :key="quantity.id" v-show="relateditem.id == quantity.id">
-                <b-form-input type="number" class="text-right" min="0.00" :value="quantity.count">{{ quantity.count  }}</b-form-input>
+                <b-form-input type="number" class="text-right" min="0.00" :value="quantity.count">{{ quantity.count }}</b-form-input>
               </div>
-              
-              <button @click="increment(relateditem.id)" class="rounded-circle px-2 ml-2">
-                  <b-icon icon="plus" aria-hidden="true"></b-icon> 
-              </button> 
+              <button @click="increment(relateditem.id)" class="btn btn-light rounded-circle">
+                <b-icon icon="plus" aria-hidden="true"></b-icon>
+              </button>
             </div>
-            <div class="clearfix">
-              <button class="float-right mt-2 btn btn-primary"  @click="create_cart_item(relateditem)" >Add to cart</button>
-            </div>
+            <button class="btn btn-primary btn-add-to-cart" @click="create_cart_item(relateditem)">Add to cart</button>
           </div>
-       </div>
+        </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -178,7 +174,6 @@ export default {
         })
     },
   },
-
   mounted() {
     this.$axios.get(`/items`)
         .then(response => {
@@ -248,12 +243,82 @@ export default {
 </script>
 
 <style scoped>
-  /* .card:hover {
-    box-shadow: 8px 8px 16px 0 rgba(0, 0, 0, 0.2);
-    transform: scale(1.1); /* Enlarge the card on hover */
-  /* } */ 
+.container {
+  padding-top: 20px;
+}
 
-  input[type=number]::-webkit-inner-spin-button,
+.navbar {
+  background-color: #f8f9fa;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.nav-tabs .nav-link {
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+.card-container {
+  width: 100%; /* Expand to full width */
+  margin: auto
+}
+
+.card-wrapper {
+  flex: 0 0 auto; /* Maintain fixed width for each card */
+  width: 18rem;
+}
+
+.card {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  transform: scale(1.05);
+}
+
+.card-img-top {
+  object-fit: cover;
+  height: 30vh;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.description {
+  height: 5em; /* Set a fixed height for the description */
+  overflow: hidden;
+}
+
+.price {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.btn-add-to-cart {
+  width: 100%;
+}
+
+.btn-light {
+  background-color: #f8f9fa;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-light:hover {
+  background-color: #e9ecef;
+}
+input[type=number]::-webkit-inner-spin-button,
   input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;

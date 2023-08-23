@@ -32,7 +32,24 @@ class OrdersController < ApplicationController
       render json: @order.errors, status: :unprocessable_entity
     end
   end
-    
+  
+  def accept
+    @order = Order.find(params[:order_id])
+    @order.update(status: 'accepted')
+    @user = User.find(params[:user_id])
+    OrderMailer.with(user: @user, order: @order, order_details: @order.order_details, description: '').accept_mail.deliver_now
+    render json: {}, status: :ok
+  end
+
+  def cancel
+    @order = Order.find(params[:order_id])
+    @order.update(status: 'canceled')
+    @user = User.find(params[:user_id])
+    OrderMailer.with(user: @user, order: @order, order_details: @order.order_details, description: params[:description]).cancel_mail.deliver_now
+    render json: {}, status: :ok
+  end
+
+
   private
 
   def order_params(data)
@@ -50,7 +67,7 @@ class OrdersController < ApplicationController
       order_id: order_id,
       cake_name: cart_item['cake_name'],
       quantity: cart_item['quantity'],
-      price: cart_item['unit_price']
+      price: cart_item['quantity']*cart_item['unit_price']
     }
   end
 end

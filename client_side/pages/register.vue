@@ -1,64 +1,62 @@
 <template>
-    <div>
-      <div class="d-flex align-items-center justify-content-center" style="height: 100vh;">
-        <div class="card w-50 m-auto shadow">
-          <div class="card-body">
-            <h3 class="my-3 col-lg-6 col-12 m-auto">Create An Account</h3>
-            <form class="col-lg-6 col-12 m-auto" @submit.prevent="register">
-              <div class="form-group mt-4">
-                <label>Name</label>
-                <input type="text" class="form-control" v-model="user.name">
-                <div v-if="errorMessage">
-                    <span class="text-danger" v-for="error in errors.name" :key="error"> Name {{ error }}</span>
-                  </div>
-              </div>
-              <div class="form-group">
-                <label>Email address</label>
-                <input type="text" class="form-control" v-model="user.email">
-                <div v-if="errorMessage">
-                    <span class="text-danger" v-for="error in errors.email" :key="error"> Email {{ error }}</span>
-                  </div>
-              </div>
-              <div class="form-group">
-                <label>Password</label>
-                <div class="position-relative">
-                  <input :type="type" class="form-control" v-model="user.password">
-                  <font-awesome-icon :icon="icon" class="mr-2 font-awesome position-absolute" @click="showPwd" style="right: 2px;top: 12px;color:#7b8ea1;" v-show="user.password" />
+    <div class="login-container d-flex align-items-center justify-content-end">
+      <div class="card login-card shadow">
+        <div class="card-body">
+          <h3 class="card-title text-center">Create An Account</h3>
+          <form class="login-form" @submit.prevent="register">
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" class="form-control reduced-opacity-input" v-model="user.name">
+              <div v-if="errorMessage">
+                  <span class="text-danger" v-for="error in errors.name" :key="error"> Name {{ error }}</span>
                 </div>
-                <div v-if="errorMessage">
-                    <span class="text-danger" v-for="error in errors.password" :key="error"> Password {{ error }}</span>
-                  </div>
-              </div>
-              <div class="form-group">
-                <label>Confirm Password</label>
-                <div class="position-relative">
-                  <input :type="c_type" class="form-control" v-model="user.password_confirmation">
-                  <font-awesome-icon :icon="c_icon" class="mr-2 font-awesome position-absolute" @click="showcPwd" style="right: 2px;top: 12px;color:#7b8ea1;" v-show="user.password_confirmation" />
+            </div>
+            <div class="form-group">
+              <label>Email address</label>
+              <input type="text" class="form-control reduced-opacity-input" v-model="user.email">
+              <div v-if="errorMessage">
+                  <span class="text-danger" v-for="error in errors.email" :key="error"> Email {{ error }}</span>
                 </div>
-                <div v-if="errorMessage">
-                    <span class="text-danger" v-for="error in errors.password_confirmation" :key="error"> Password Confirmation {{ error }}</span>
-                  </div>
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <div class="position-relative">
+                <input :type="type" class="form-control reduced-opacity-input" v-model="user.password">
+                <font-awesome-icon :icon="icon" class="mr-2 font-awesome position-absolute" @click="showPwd" style="right: 2px;top: 12px;color:#7b8ea1;" v-show="user.password" />
               </div>
-              <div class="form-group mt-4">
-                <label>Phone No</label>
-                <input type="text" class="form-control" v-model="user.phone">
-                <div v-if="errorMessage">
-                    <span class="text-danger" v-for="error in errors.phone" :key="error"> Phone {{ error }}</span>
-                  </div>
+              <div v-if="errorMessage">
+                  <span class="text-danger" v-for="error in errors.password" :key="error"> Password {{ error }}</span>
+                </div>
+            </div>
+            <div class="form-group">
+              <label>Confirm Password</label>
+              <div class="position-relative">
+                <input :type="c_type" class="form-control reduced-opacity-input" v-model="user.password_confirmation">
+                <font-awesome-icon :icon="c_icon" class="mr-2 font-awesome position-absolute" @click="showcPwd" style="right: 2px;top: 12px;color:#7b8ea1;" v-show="user.password_confirmation" />
               </div>
-              <div class="form-group mt-4">
-                <label>Address</label>
-                <input type="text" class="form-control" v-model="user.address">
-                <div v-if="errorMessage">
-                    <span class="text-danger" v-for="error in errors.address" :key="error"> Address {{ error }}</span>
-                  </div>
-              </div>
-              <div class="clearfix">
-                  <button @click="back" class="float-left btn btn-outline-dark">back</button>
-                  <button type="submit" class="float-right btn btn-outline-primary">submit</button>
-              </div>
-            </form>
-          </div>
+              <div v-if="errorMessage">
+                  <span class="text-danger" v-for="error in errors.password_confirmation" :key="error"> Password Confirmation {{ error }}</span>
+                </div>
+            </div>
+            <div class="form-group mt-4">
+              <label>Phone No</label>
+              <input type="text" class="form-control reduced-opacity-input" v-model="user.phone">
+              <div v-if="errorMessage">
+                  <span class="text-danger" v-for="error in errors.phone" :key="error"> Phone {{ error }}</span>
+                </div>
+            </div>
+            <div class="form-group mt-4">
+              <label>Address</label>
+              <input type="text" class="form-control reduced-opacity-input" v-model="user.address">
+              <div v-if="errorMessage">
+                  <span class="text-danger" v-for="error in errors.address" :key="error"> Address {{ error }}</span>
+                </div>
+            </div>
+            <div class="clearfix">
+                <button @click="back" class="float-left btn btn-outline-dark">back</button>
+                <button type="submit" class="float-right btn btn-outline-primary">submit</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -131,4 +129,29 @@
     
   }
   </script>
-  
+  <style scoped>
+  .login-container {
+    height: 100vh;
+    background-image: url('../assets/backery_img.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding-right: 15%;
+  }
+
+  .login-form {
+  padding: 20px;
+}
+
+.login-card {
+  width: 600px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 25px;
+}
+
+
+.reduced-opacity-input {
+  opacity: 0.6; /* Adjust the opacity value as needed */
+}
+
+</style>

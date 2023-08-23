@@ -3,60 +3,62 @@
     <div class="card w-50 m-auto shadow">
       <div class="card-body">
         <table class="table">
-        <thead>
+          <thead>
             <tr>
-            <th scope="col" style="text-align: center;">Name</th>
-            <th scope="col" style="text-align: center;">Quantity</th>
-            <th scope="col" style="text-align: center;">Price</th>
+              <th scope="col" style="text-align: center;">Name</th>
+              <th scope="col" style="text-align: center;">Quantity</th>
+              <th scope="col" style="text-align: center;">Price</th>
             </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
             <tr v-for="cart_item in cart_items" :key="cart_item.id">
-            <td style="text-align: center;">{{ cart_item.cake_name }}</td>
-            <td style="text-align: center;" >
-              <button @click="decrement(cart_item)" @change="total_price" class="px-2 mr-2" style=" background-color: transparent !important; border: none; ">
-                  <b-icon icon="dash" aria-hidden="true"></b-icon> 
-              </button> 
-              {{ cart_item.quantity }}
-              <button @click="increment(cart_item)" @change="total_price" class="px-2 ml-2" style=" background-color: transparent !important; border: none; ">
-                  <b-icon icon="plus" aria-hidden="true"></b-icon> 
-              </button> 
-            </td>
-            <td style="text-align: center;">{{ cart_item.unit_price * cart_item.quantity }}</td>
+              <td style="text-align: center;">{{ cart_item.cake_name }}</td>
+              <td style="text-align: center;">
+                <button @click="decrement(cart_item)" class="btn btn-link px-2">
+                  <b-icon icon="dash" aria-hidden="true"></b-icon>
+                </button>
+                {{ cart_item.quantity }}
+                <button @click="increment(cart_item)" class="btn btn-link px-2">
+                  <b-icon icon="plus" aria-hidden="true"></b-icon>
+                </button>
+              </td>
+              <td style="text-align: center;">{{ cart_item.unit_price * cart_item.quantity }}</td>
             </tr>
             <tr>
-                <td colspan="2" style="text-align: right;">Subtotal:</td>
-                <td style="text-align: center;">{{ total }}</td>
+              <td colspan="2" style="text-align: right;">Subtotal:</td>
+              <td style="text-align: center;">{{ total }}</td>
             </tr>
             <tr v-if="selectedOption == 'delivery'">
-                <td class="border-top-0" colspan="2" style="text-align: right;">Deli:</td>
-                <td class="border-top-0" style="text-align: center;"> {{ deli_price }} </td>
+              <td class="border-top-0" colspan="2" style="text-align: right;">Deli:</td>
+              <td class="border-top-0" style="text-align: center;">{{ deli_price }}</td>
             </tr>
             <tr>
-                <td class="border-top-0" colspan="2" style="text-align: right;">Tax:</td>
-                <td class="border-top-0" style="text-align: center;">{{ tax }}</td>
+              <td class="border-top-0" colspan="2" style="text-align: right;">Tax:</td>
+              <td class="border-top-0" style="text-align: center;">{{ tax }}</td>
             </tr>
             <tr>
-                <td colspan="2" style="text-align: right; font-weight: bold;">Total:</td>
-                <td style="font-weight: bold; text-align: center;">{{ total + tax + deli_price}}</td>
+              <td colspan="2" style="text-align: right; font-weight: bold;">Total:</td>
+              <td class="font-bold" style="text-align: center;">{{ total + tax + deli_price }}</td>
             </tr>
-        </tbody>
+          </tbody>
         </table>
         <div class="d-flex align-items-center justify-content-center">
-          <label>
-            <input type="radio" v-model="selectedOption" value="delivery" @change="delivery_price"> Cash On Delivery
+          <label class="mr-2">
+            <input type="radio" v-model="selectedOption" value="delivery" @change="delivery_price">
+            Cash On Delivery
           </label>
-          <label class="ml-2">
-            <input type="radio" v-model="selectedOption" value="pick_up" @change="delivery_price"> Pick Up
+          <label>
+            <input type="radio" v-model="selectedOption" value="pick_up" @change="delivery_price">
+            Pick Up
           </label>
         </div>
         <div class="clear-fix">
           <button class="float-left mt-2 btn btn-outline-dark" @click="back">Back</button>
           <button class="float-right mt-2 btn btn-outline-info"
-              @click="save_order"
-              :disabled="isConfirmButtonDisabled"
-              :class="{ 'disabled': isConfirmButtonDisabled }">
-               Confirm Order
+                  @click="save_order"
+                  :disabled="isConfirmButtonDisabled"
+                  :class="{ 'disabled': isConfirmButtonDisabled }">
+            Confirm Order
           </button>
         </div>
       </div>
@@ -155,3 +157,16 @@ export default{
     }
 }
 </script>
+<style scoped>
+  th, td {
+    text-align: center;
+  }
+  .font-bold {
+    font-weight: bold;
+  }
+  .clear-fix::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+</style>

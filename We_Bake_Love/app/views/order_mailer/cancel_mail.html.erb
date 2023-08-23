@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .email-container {
+      margin: auto;
+      padding: 20px;
+      max-width: 800px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .description {
+      font-style: italic;
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+    .total {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <h2>Order Cancellation Notification</h2>
+    <p>Dear <%= @user.name %>,</p>
+    <p>We apologize, but we had to cancel your order:</p>
+    <p class="description"><%= @description %></p>
+
+    <h3>Your Order Details:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Quantity</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @order_details.each do |order_detail| %>
+          <tr>
+            <td><%= order_detail['cake_name'] %></td>
+            <td><%= order_detail['quantity'] %></td>
+            <td><%= order_detail['price'] %></td>
+          </tr>
+        <% end %>
+        <tr>
+          <td colspan="2" class="text-right">Subtotal:</td>
+          <td><%= @sub_total %></td>
+        </tr>
+        <% if @order.option == 'delivery' %>
+          <tr>
+            <td class="border-top-0 text-right" colspan="2">Delivery:</td>
+            <td class="border-top-0"><%= 2000 %></td>
+          </tr>
+        <% end %>
+        <tr>
+          <td class="border-top-0 text-right" colspan="2">Tax:</td>
+          <td class="border-top-0"><%= @tax %></td>
+        </tr>
+        <tr class="total">
+          <td colspan="2" class="text-right">Total:</td>
+          <td><%= @order.total %></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Regards,</p>
+    <p>WeBakeLove</p>
+  </div>
+</body>
+</html>
