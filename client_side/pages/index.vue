@@ -1,54 +1,57 @@
 <template>
-  <div class="">
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">CakeShop</a>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent"> 
-          <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="search">
-            <button class="btn btn-outline-success ml-2"  @click.prevent="searchitem()">Search</button>
-          </form>
-          <cart_items_display ref="childRef" :cart_items="cart_items" :shouldDisableLink="shouldDisableLink" :amount="amount" />
+  <div class="index-container">
+    <div class="fixed-top" style="z-index: 100;" >
+      <nav class="navbar navbar-expand-lg bg-body-tertiary ">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">CakeShop</a>
+          <div class="d-flex">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent"> 
+              <form class="d-flex">
+                <input class="form-control me-2 reduced-opacity" style="width: 300px;" type="search" placeholder="Search" aria-label="Search" v-model="search">
+                <button class="btn btn-secondary ml-2"  @click.prevent="searchitem()">Search</button>
+              </form>
+              <cart_items_display ref="childRef" :cart_items="cart_items" :shouldDisableLink="shouldDisableLink" :amount="amount" />
+            </div>
+            <profile_avatar v-if="$auth.loggedIn" :amount="amount" />
+            <button v-else class="float-right mt-2 btn btn-info" @click="loggedIn"> Log In </button>
+          </div>
         </div>
-        <profile_avatar v-if="$auth.loggedIn" :amount="amount" />
-        <button v-else class="float-right mt-2 btn btn-outline-info" @click="loggedIn"> Log In </button>
-      </div>
-    </nav>
+      </nav>
 
-    <ul class="nav nav-tabs mb-5" id="myTab" role="tablist">
-      <li class="nav-item" role="" v-for="type_name in type_names" :key="type_name.id">
-        <button
-          class="nav-link"
-          @click="selectRelatedItems(type_name)"
-          :id="type_name"
-          data-toggle="tab"
-          data-target=""
-          type="button"
-          role="tab"
-          aria-controls=""
-          :class="{ active: type_name === activeNavItem }"
-        >
-          {{ type_name }}
-        </button>
-      </li>
-    </ul>
+      <ul class="nav nav-tabs mb-5" id="myTab" role="tablist">
+        <li class="nav-item" role="" v-for="type_name in type_names" :key="type_name.id">
+          <button
+            class="nav-link reduced-opacity"
+            @click="selectRelatedItems(type_name)"
+            :id="type_name"
+            data-toggle="tab"
+            data-target=""
+            type="button"
+            role="tab"
+            aria-controls=""
+            :class="{ active: type_name === activeNavItem }"
+          >
+            {{ type_name }}
+          </button>
+        </li>
+      </ul>
+    </div>
 
-    <div class="card-container d-flex flex-nowrap overflow-auto">
-      <div v-for="relateditem in relateditems" :key="relateditem.id" class="m-4 card-wrapper">
-        <div class="card">
-          <img :src="relateditem.image_url" class="card-img-top img-thumbnail" :alt="relateditem.name">
+    <div class="card-container d-flex flex-wrap overflow-auto">
+      <div v-for="relateditem in relateditems" :key="relateditem.id" class="col-md-3 mb-4">
+        <div class="card" style="border-radius: 25px;">
+          <img :src="relateditem.image_url" class="card-img-top" style=" border-radius: 25px; height: 150px; " :alt="relateditem.name">
           <div class="card-body">
             <h5 class="card-title">{{ relateditem.name }}</h5>
-            <p class="card-text description">{{ relateditem.description }}</p>
             <p class="card-text price">MMK {{ relateditem.price }}</p>
             <div class="d-flex justify-content-between align-items-center mb-2">
-              <button @click="decrement(relateditem.id)" class="btn btn-light rounded-circle">
+              <button @click="decrement(relateditem.id)" class="btn btn-link px-2 mr-2">
                 <b-icon icon="dash" aria-hidden="true"></b-icon>
               </button>
               <div v-for="quantity in quantities" :key="quantity.id" v-show="relateditem.id == quantity.id">
-                <b-form-input type="number" class="text-right" min="0.00" :value="quantity.count">{{ quantity.count }}</b-form-input>
+                <b-form-input type="number" class="text-right reduced-opacity" min="0.00" :value="quantity.count">{{ quantity.count }}</b-form-input>
               </div>
-              <button @click="increment(relateditem.id)" class="btn btn-light rounded-circle">
+              <button @click="increment(relateditem.id)" class="btn btn-link px-2 ml-2">
                 <b-icon icon="plus" aria-hidden="true"></b-icon>
               </button>
             </div>
@@ -243,12 +246,17 @@ export default {
 </script>
 
 <style scoped>
+
+.index-container {
+  background-image: url('../assets/backery_index_img.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* Keep the background image fixed */
+  height: 100vh;
+  overflow-y: scroll; /* Allow vertical scrolling for content */
+}
 .container {
   padding-top: 20px;
-}
-
-.navbar {
-  background-color: #f8f9fa;
 }
 
 .navbar-brand {
@@ -259,21 +267,36 @@ export default {
 .nav-tabs .nav-link {
   font-size: 1rem;
   padding: 0.5rem 1rem;
+  color: #495057;
+}
+.nav-tabs {
+  border-bottom: 1px solid rgba(6, 6, 6, 0.5);
+  border-top-left-radius: 25px;
+  
 }
 
+.nav-tabs .nav-link.active {
+  background-color:  rgba(255, 255, 255, 0.7);
+  color: black;
+}
+
+.nav-item button{
+  border-top-left-radius: 25px;
+}
+
+.btn-link,.btn-link:hover{
+  color: black;
+}
 .card-container {
   width: 100%; /* Expand to full width */
-  margin: auto
-}
-
-.card-wrapper {
-  flex: 0 0 auto; /* Maintain fixed width for each card */
-  width: 18rem;
+  margin: auto;
+  padding-top: 150px;
 }
 
 .card {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.2s;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .card:hover {
@@ -317,6 +340,10 @@ export default {
 
 .btn-light:hover {
   background-color: #e9ecef;
+}
+
+.reduced-opacity {
+  background-color: rgba(255, 255, 255, 0.5);
 }
 input[type=number]::-webkit-inner-spin-button,
   input[type=number]::-webkit-outer-spin-button {

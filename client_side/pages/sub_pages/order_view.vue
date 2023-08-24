@@ -1,24 +1,24 @@
 <template>
-  <div class="d-flex align-items-center justify-content-center" style="height: 100vh;">
-    <div class="card w-50 m-auto shadow">
-      <div class="card-body">
+  <div class="d-flex align-items-center justify-content-center orderview-container" style="height: 100vh;">
+    <div class="card orderview-card shadow">
+      <div class="card-body" style="text-decoration-color: white;">
         <table class="table">
           <thead>
             <tr>
               <th scope="col" style="text-align: center;">Name</th>
               <th scope="col" style="text-align: center;">Quantity</th>
-              <th scope="col" style="text-align: center;">Price</th>
+              <th scope="col" style="text-align: center; width: 150px;">Price</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="cart_item in cart_items" :key="cart_item.id">
               <td style="text-align: center;">{{ cart_item.cake_name }}</td>
               <td style="text-align: center;">
-                <button @click="decrement(cart_item)" class="btn btn-link px-2">
+                <button @click="decrement(cart_item)" class="btn btn-link px-2 mr-2">
                   <b-icon icon="dash" aria-hidden="true"></b-icon>
                 </button>
                 {{ cart_item.quantity }}
-                <button @click="increment(cart_item)" class="btn btn-link px-2">
+                <button @click="increment(cart_item)" class="btn btn-link px-2 ml-2">
                   <b-icon icon="plus" aria-hidden="true"></b-icon>
                 </button>
               </td>
@@ -42,19 +42,19 @@
             </tr>
           </tbody>
         </table>
-        <div class="d-flex align-items-center justify-content-center">
-          <label class="mr-2">
+        <div class="d-flex align-items-center justify-content-center" >
+          <label class="mr-2" style="color: white;">
             <input type="radio" v-model="selectedOption" value="delivery" @change="delivery_price">
             Cash On Delivery
           </label>
-          <label>
+          <label style="color: white;">
             <input type="radio" v-model="selectedOption" value="pick_up" @change="delivery_price">
             Pick Up
           </label>
         </div>
         <div class="clear-fix">
-          <button class="float-left mt-2 btn btn-outline-dark" @click="back">Back</button>
-          <button class="float-right mt-2 btn btn-outline-info"
+          <button class="float-left mt-2 btn btn-dark" @click="back">Back</button>
+          <button class="float-right mt-2 btn btn-confirm"
                   @click="save_order"
                   :disabled="isConfirmButtonDisabled"
                   :class="{ 'disabled': isConfirmButtonDisabled }">
@@ -158,8 +158,23 @@ export default{
 }
 </script>
 <style scoped>
+
+  .orderview-container {
+    background-image: url('~/assets/backery_index_img.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .orderview-card {
+    width: 700px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 25px;
+  }
+
   th, td {
     text-align: center;
+    color: white;
   }
   .font-bold {
     font-weight: bold;
@@ -168,5 +183,13 @@ export default{
     content: "";
     display: table;
     clear: both;
+  }
+
+  .btn-link,.btn-link:hover{
+  color: white;
+  }
+  .btn-confirm{
+    border: 1px solid white;
+    color: white;
   }
 </style>

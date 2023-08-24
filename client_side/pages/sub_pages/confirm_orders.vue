@@ -61,7 +61,7 @@
                       <textarea class="form-control" id="description" v-model="description"></textarea>
                     </div>
                     <div class="d-flex justify-content-between">
-                      <button type="button" class="btn btn-outline-secondary rounded-pill" data-dismiss="modal" @click="close">Close</button>
+                      <button type="button" class="btn btn-secondary rounded-pill" data-dismiss="modal" @click="close">Close</button>
                       <button class="btn btn-primary rounded-pill btn btn-danger">cancelOrder</button>
                     </div>
                   </form>

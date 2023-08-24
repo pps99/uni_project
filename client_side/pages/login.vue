@@ -85,7 +85,6 @@ export default {
 
 .btn-link {
   text-decoration: none;
-  color: #FF6B6B;
 }
 
 .btn-link:hover {

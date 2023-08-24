@@ -31,7 +31,7 @@
                     <span class="text-danger" v-for="error in errors.password_confirmation" :key="error"> Password Confirmation {{ error }}</span>
                   </div>
               </div>                
-              <button type="submit" class="float-right btn btn-outline-primary">submit</button>   
+              <button type="submit" class="float-right btn btn-primary">submit</button>   
             </form>
           </div>
         </div>

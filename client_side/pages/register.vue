@@ -1,9 +1,9 @@
 <template>
-    <div class="login-container d-flex align-items-center justify-content-end">
-      <div class="card login-card shadow">
+    <div class="register-container d-flex align-items-center justify-content-end">
+      <div class="card register-card shadow">
         <div class="card-body">
           <h3 class="card-title text-center">Create An Account</h3>
-          <form class="login-form" @submit.prevent="register">
+          <form class="register-form" @submit.prevent="register">
             <div class="form-group">
               <label>Name</label>
               <input type="text" class="form-control reduced-opacity-input" v-model="user.name">
@@ -38,14 +38,14 @@
                   <span class="text-danger" v-for="error in errors.password_confirmation" :key="error"> Password Confirmation {{ error }}</span>
                 </div>
             </div>
-            <div class="form-group mt-4">
+            <div class="form-group">
               <label>Phone No</label>
               <input type="text" class="form-control reduced-opacity-input" v-model="user.phone">
               <div v-if="errorMessage">
                   <span class="text-danger" v-for="error in errors.phone" :key="error"> Phone {{ error }}</span>
                 </div>
             </div>
-            <div class="form-group mt-4">
+            <div class="form-group">
               <label>Address</label>
               <input type="text" class="form-control reduced-opacity-input" v-model="user.address">
               <div v-if="errorMessage">
@@ -53,8 +53,8 @@
                 </div>
             </div>
             <div class="clearfix">
-                <button @click="back" class="float-left btn btn-outline-dark">back</button>
-                <button type="submit" class="float-right btn btn-outline-primary">submit</button>
+                <button @click="back" class="float-left btn btn-dark">back</button>
+                <button type="submit" class="float-right btn btn-primary">submit</button>
             </div>
           </form>
         </div>
@@ -130,20 +130,21 @@
   }
   </script>
   <style scoped>
-  .login-container {
+  .register-container {
     height: 100vh;
     background-image: url('../assets/backery_img.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     padding-right: 15%;
+    overflow-y: scroll;
   }
 
-  .login-form {
+  .register-form {
   padding: 20px;
 }
 
-.login-card {
+.register-card {
   width: 600px;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 25px;

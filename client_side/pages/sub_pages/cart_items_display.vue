@@ -6,7 +6,7 @@
         <span class="sr-only">Notifications</span>
         <b-icon icon="cart-plus-fill" aria-hidden="true"></b-icon> Cart
       </button>
-      <div class="dropdown-menu" style="width: 50vh;" v-on:click.stop v-show="cart_items.length > 0">
+      <div class="dropdown-menu dropdown-menu-right" style="width: 50vh;" v-on:click.stop v-show="cart_items.length > 0">
         <a class="dropdown-item" v-for="cart_item in cart_items" :key="cart_item.id">
           <div class="clearfix">
             <div class="float-left">
@@ -25,12 +25,12 @@
         <div class="clearfix">
           <button
             v-if="!shouldDisableLink"
-            class="float-right mt-2 btn btn-outline-info btn-order"
+            class="float-right mt-2 btn btn-info btn-order"
             @click="confirm"
           >
             Order
           </button>
-          <button v-else class="float-right mt-2 btn btn-outline-info btn-order" disabled>
+          <button v-else class="float-right mt-2 btn btn-info btn-order" disabled>
             Order
           </button>
         </div>

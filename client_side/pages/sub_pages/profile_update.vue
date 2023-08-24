@@ -1,50 +1,49 @@
 <template>
-  <div>
-    <Notifications style="margin-top: 60px;" />
+  <div class="profileupdate-container">
     <div class="d-flex align-items-center justify-content-center" style="height: 100vh;">
-      <div class="card w-50 m-auto shadow">
+      <div class="card profileupdate-card shadow">
         <div class="card-body">
-          <h3 class="my-3 col-lg-6 col-12 m-auto">Update Account</h3>
-          <form class="col-lg-6 col-12 m-auto" @submit.prevent="update">
+          <h3 class="card-title text-center">Update Account</h3>
+          <form class="profileupdate-form" @submit.prevent="update">
             <div class="form-group mt-4">
               <label for="name">Name</label>
-              <input type="text" class="form-control" id="name" v-model="user.name">
+              <input type="text" class="form-control reduced-opacity-input" id="name" v-model="user.name">
               <div v-if="errorMessage">
                 <span class="text-danger" v-for="error in errors.name" :key="error"> Name {{ error }}</span>
               </div>
             </div>
             <div class="form-group">
               <label for="email">Email address</label>
-              <input type="text" class="form-control" id="email" v-model="user.email">
+              <input type="text" class="form-control reduced-opacity-input" id="email" v-model="user.email">
               <div v-if="errorMessage">
                 <span class="text-danger" v-for="error in errors.email" :key="error"> Email {{ error }}</span>
               </div>
             </div>
             <div class="form-group mt-4">
-              <a href="#" data-toggle="modal" data-target="#staticBackdrop">Change Password</a>
+              <a href="#" data-toggle="modal" data-target="#staticBackdrop" class="white">Change Password</a>
             </div>
-            <div class="form-group mt-4">
+            <div class="form-group">
               <label for="phone">Phone No</label>
-              <input type="text" class="form-control" id="phone" v-model="user.phone">
+              <input type="text" class="form-control reduced-opacity-input" id="phone" v-model="user.phone">
               <div v-if="errorMessage">
                 <span class="text-danger" v-for="error in errors.phone" :key="error"> Phone {{ error }}</span>
               </div>
             </div>
-            <div class="form-group mt-4">
+            <div class="form-group">
               <label for="address">Address</label>
-              <input type="text" class="form-control" id="address" v-model="user.address">
+              <input type="text" class="form-control reduced-opacity-input" id="address" v-model="user.address">
               <div v-if="errorMessage">
                 <span class="text-danger" v-for="error in errors.address" :key="error"> Address {{ error }}</span>
               </div>
             </div>
             <div class="clearfix">
-              <button @click="back" class="float-left btn btn-outline-dark">Back</button>
-              <button type="submit" class="float-right btn btn-outline-primary">Submit</button>
+              <button @click="back" class="float-left btn btn-dark">Back</button>
+              <button type="submit" class="float-right btn btn-primary">Submit</button>
             </div>
           </form>
 
           <!-- Modal -->
-          <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal fade modal-reduced-opacity" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
               <div class="modal-content">
                 <div class="modal-header">
@@ -77,7 +76,7 @@
                       </div>
                     </div>
                     <div class="d-flex justify-content-between">
-                      <button type="button" class="btn btn-outline-secondary rounded-pill" data-dismiss="modal" @click="close">Close</button>
+                      <button type="button" class="btn btn-secondary rounded-pill" data-dismiss="modal" @click="close">Close</button>
                       <button class="btn btn-primary rounded-pill" :disabled="!passwords.old_pass" id="change">Change</button>
                     </div>
                   </form>
@@ -179,4 +178,38 @@ export default {
   .hidden {
     display: none;
   }
+  .profileupdate-container {
+    height: 100vh;
+    background-image: url('~/assets/backery_index_img.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow-y: scroll;
+  }
+
+  .profileupdate-form {
+  padding: 20px;
+}
+
+.profileupdate-card {
+  width: 500px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 25px;
+}
+
+
+.reduced-opacity-input {
+  opacity: 0.6; /* Adjust the opacity value as needed */
+}
+.modal-reduced-opacity {
+  opacity: 0.9; /* Adjust the opacity value as needed */
+}
+
+.modal-content{
+  border-radius: 25px;
+  width: 485px;
+}
+.white{
+  color: white;
+}
 </style>
