@@ -36,7 +36,9 @@ class OrdersController < ApplicationController
   def accept
     @order = Order.find(params[:order_id])
     @order.update(status: 'accepted')
-    @user = User.find(params[:user_id])
+    @user = User.find(@order.user_id)
+    @user.update(status: 'accepted')
+    TransitionService.updateAmount(@order)
     OrderMailer.with(user: @user, order: @order, order_details: @order.order_details, description: '').accept_mail.deliver_now
     render json: {}, status: :ok
   end
@@ -44,7 +46,8 @@ class OrdersController < ApplicationController
   def cancel
     @order = Order.find(params[:order_id])
     @order.update(status: 'canceled')
-    @user = User.find(params[:user_id])
+    @user = User.find(@order.user_id)
+    @user.update(status: 'canceled')
     OrderMailer.with(user: @user, order: @order, order_details: @order.order_details, description: params[:description]).cancel_mail.deliver_now
     render json: {}, status: :ok
   end

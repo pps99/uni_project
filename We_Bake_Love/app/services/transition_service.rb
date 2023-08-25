@@ -7,5 +7,9 @@ class TransitionService
       def getAmount(user_id)
         TransitionRepository.getAmount(user_id)
       end
+
+      def updateAmount(order)
+        TransitionRepository.updateAmount(order)
+      end
     end
   end
