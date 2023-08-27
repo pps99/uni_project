@@ -45,6 +45,8 @@ Rails.application.routes.draw do
 
   get '/items', to: "cakes#get_items"
   post '/getAmount', to: "transitions#getAmount"
-
+  post '/savetransition_no', to: "transitions#savetransition_no"
+  post '/transitions/updateAccountAmount', to: "transitions#updateAccountAmount"
+  post '/transitions/cancelAccountAmount', to: "transitions#cancelAccountAmount"
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

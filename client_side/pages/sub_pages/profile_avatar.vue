@@ -5,11 +5,15 @@
       <div v-if="isAdmin">
         <NuxtLink :to="{ name: 'sub_pages-confirm_orders' }" class="dropdown-item">Confirm Orders</NuxtLink>
         <hr class="dropdown-divider" />
+        <NuxtLink :to="{ name: 'sub_pages-confirm_recharge_amount' }" class="dropdown-item">Confrim Recharge Amount</NuxtLink>
+        <hr class="dropdown-divider" />
         <NuxtLink :to="{ name: 'sub_pages-create_item' }" class="dropdown-item">Create An Item</NuxtLink>
         <hr class="dropdown-divider" />
       </div>
       <div v-else>
         <p class="dropdown-item text-success">Amount: MMK {{ amount }}</p>
+        <hr class="dropdown-divider" />
+        <NuxtLink :to="{ name: 'sub_pages-recharge_balance' }" class="dropdown-item">Recharge Balance</NuxtLink>
         <hr class="dropdown-divider" />
       </div>
       <NuxtLink :to="{ name: 'sub_pages-profile_update' }" class="dropdown-item">Profile Update</NuxtLink>

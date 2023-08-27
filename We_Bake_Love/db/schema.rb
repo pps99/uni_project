@@ -93,7 +93,9 @@ ActiveRecord::Schema.define(version: 2023_08_22_044114) do
 
   create_table "transitions", charset: "utf8mb3", force: :cascade do |t|
     t.string "user_id"
-    t.string "amount", default: "0"
+    t.integer "amount", default: 0
+    t.integer "recharge_amount", default: 0
+    t.string "transition_no", default: "nil"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
