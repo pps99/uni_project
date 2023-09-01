@@ -25,12 +25,11 @@ class CakesController < ApplicationController
 
   def update
     @cake = CakeService.getCakeByID(params[:id])
-    @is_cake_update  = CakeService.updateCake(@cake,cake_params)
-    if  @is_cake_update
-      flash[:success] = "Cake Updated successfully" 
-      redirect_to @cake
+    @is_cake_update  = CakeService.updateCake(@cake,params[:image]=='null' ? update_cake_params : cake_params)
+    if @is_cake_update
+      render json: {}, status: :created
     else
-      render :edit, status: :unprocessable_entity
+      render json: @is_cake_create.errors, status: :unprocessable_entity
     end
   end
 
@@ -38,7 +37,7 @@ class CakesController < ApplicationController
     @cake = CakeService.getCakeByID(params[:id])
     @is_cake_destroy  = CakeService.destroy(@cake)
     if  @is_cake_destroy
-      redirect_to @cake
+      render json: {}, status: :created
     end
   end
   
@@ -84,5 +83,7 @@ class CakesController < ApplicationController
   def cake_params
     params.permit(:image, :name, :description, :price, :type_name).merge(user_id: logged_in_user.id)
   end
-
+  def update_cake_params
+    params.permit(:name, :description, :price, :type_name).merge(user_id: logged_in_user.id)
+  end
 end

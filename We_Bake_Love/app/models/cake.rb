@@ -7,13 +7,10 @@ class Cake < ApplicationRecord
 
   belongs_to :user, optional: true
   has_one_attached :image, :dependent => :destroy
-
-  has_many :cart_items
-  has_many :carts
-  has_many :order_details, :dependent => :destroy 
+ 
 
   validates :name, presence: true
-  validates :image, presence: true
+  # validates :image, presence: true
   validates :price, presence: true
 
 
