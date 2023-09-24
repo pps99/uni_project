@@ -6,6 +6,7 @@ class CreateCakes < ActiveRecord::Migration[6.1]
       t.string :description
       t.string :type_name
       t.integer :price
+      t.integer :discount, default: 0
       t.references :user, null: true, foreign_key: true
 
       t.timestamps

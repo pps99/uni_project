@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 2023_08_22_044114) do
     t.string "description"
     t.string "type_name"
     t.integer "price"
+    t.integer "discount", default: 0
     t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

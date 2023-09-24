@@ -81,9 +81,9 @@ class CakesController < ApplicationController
 
   private
   def cake_params
-    params.permit(:image, :name, :description, :price, :type_name).merge(user_id: logged_in_user.id)
+    params.permit(:image, :name, :description, :price, :type_name, :discount).merge(user_id: logged_in_user.id)
   end
   def update_cake_params
-    params.permit(:name, :description, :price, :type_name).merge(user_id: logged_in_user.id)
+    params.permit(:name, :description, :price, :type_name, :discount).merge(user_id: logged_in_user.id)
   end
 end

@@ -43,7 +43,15 @@
           <img :src="relateditem.image_url" class="card-img-top" style=" border-radius: 25px; height: 150px; " :alt="relateditem.name">
           <div class="card-body">
             <h5 class="card-title">{{ relateditem.name }}</h5>
-            <p class="card-text price">MMK {{ relateditem.price }}</p>
+              <p class="card-text price">
+                <span v-if="relateditem.discount">
+                  <del>MMK {{ relateditem.price }}</del>
+                  MMK {{ calculateNewPrice(relateditem.price, relateditem.discount) }} ({{ relateditem.discount }} % off )
+                </span>
+                <span v-else>
+                  MMK {{ relateditem.price }}
+                </span>
+              </p>
             <div class="d-flex justify-content-between align-items-center mb-2">
               <button @click="decrement(relateditem.id)" class="btn btn-link px-2 mr-2">
                 <b-icon icon="dash" aria-hidden="true"></b-icon>
@@ -175,6 +183,11 @@ export default {
           this.errors = error.response.data.error
           this.errorMessage = true
         })
+    },
+    calculateNewPrice(originalPrice, discount) {
+      const discountAmount = (originalPrice * discount) / 100;
+      const newPrice = originalPrice - discountAmount;
+      return newPrice; // Assuming you want to display the new price with 2 decimal places
     },
   },
   mounted() {

@@ -11,6 +11,8 @@
         <hr class="dropdown-divider" />
         <NuxtLink :to="{ name: 'sub_pages-update_item' }" class="dropdown-item">Update An Item</NuxtLink>
         <hr class="dropdown-divider" />
+        <NuxtLink :to="{ name: 'sub_pages-monthly_sale' }" class="dropdown-item">Monthly Sale Summary</NuxtLink>
+        <hr class="dropdown-divider" />
       </div>
       <div v-else>
         <p class="dropdown-item text-success">Amount: MMK {{ amount }}</p>

@@ -8,11 +8,12 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th scope="col" style="width: 222px;">Image</th>
-                  <th scope="col" style="width: 150px;">Name</th>
-                  <th scope="col" style="width: 150px;">Type Name</th>
-                  <th scope="col" style="width: 150px;">Price</th>
-                  <th scope="col" style="width: 150px;">Actions</th>
+                  <th scope="col" style="width: 16.67%;">Image</th>
+                  <th scope="col" style="width: 16.67%;">Name</th>
+                  <th scope="col" style="width: 16.67%;">Type Name</th>
+                  <th scope="col" style="width: 16.67%;">Price</th>
+                  <th scope="col" style="width: 16.67%;">Discount</th>
+                  <th scope="col" style="width: 16.67%;">Actions</th>
                 </tr>
               </thead>
             </table>
@@ -22,14 +23,15 @@
               <table class="table">
                 <tbody>
                   <tr v-for="item in items" :key="item.id">
-                    <td style="width: 150px; ">
-                      <img :src="item.image_url" class="card-img-top" style="border-radius: 25px; height: 150px;" :alt="item.name">
-                      <input class="mt-2" type="file" @change="imagePreview(item, $event)">
+                    <td style="width: 16.67%; position: relative;">
+                      <img :src="item.image_url" class="card-img-top" style="border-radius: 25px; height: 150px; margin-bottom: 30px;" :alt="item.name">
+                      <input class="mt-2" type="file" @change="imagePreview(item, $event)" style="width: 100%; position: absolute; bottom: 5px; left: 0;">
                     </td>
-                    <td style="width: 150px;"><input type="text" class="reduced-opacity input_style" v-model="item.name"></td>
-                    <td style="width: 150px;"><input type="text" class="reduced-opacity input_style" v-model="item.type_name"></td>
-                    <td style="width: 150px;"><input type="text" class="reduced-opacity input_style" v-model="item.price"></td>
-                    <td style="width: 150px;">
+                    <td style="width: 16.67%;"><input type="text" class="reduced-opacity input_style" v-model="item.name"></td>
+                    <td style="width: 16.67%;"><input type="text" class="reduced-opacity input_style" v-model="item.type_name"></td>
+                    <td style="width: 16.67%;"><input type="text" class="reduced-opacity input_style" v-model="item.price"></td>
+                    <td style="width: 16.67%;"><input type="text" class="reduced-opacity input_style" v-model="item.discount"></td>
+                    <td style="width: 16.67%;">
                       <button class="btn btn-primary" style="border-radius: 25px; margin-top: 55px;" @click="update(item)">
                         <i class="fas fa-edit"></i> Update
                       </button>
@@ -154,7 +156,7 @@ export default {
 }
 
 .orderview-card {
-  width: 90%;
+  width: 95%;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 25px;
   overflow: hidden;
