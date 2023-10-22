@@ -15,7 +15,7 @@ class TransitionRepository
       end
  
       def updateAccountAmount(transition_id)
-        @transition = Transition.find_by(transition_id)
+        @transition = Transition.find_by(id: transition_id)
         @transition.update(amount: @transition.amount+@transition.recharge_amount,recharge_amount: 0,transition_no: 'nil')
       end
       

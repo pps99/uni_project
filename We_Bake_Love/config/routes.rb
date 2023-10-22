@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   resources :transitions
   resources :orders
   resources :order_details
-
+  resources :notifications
 
   root "home_page#index"
   # Home
@@ -48,5 +48,7 @@ Rails.application.routes.draw do
   post '/savetransition_no', to: "transitions#savetransition_no"
   post '/transitions/updateAccountAmount', to: "transitions#updateAccountAmount"
   post '/transitions/cancelAccountAmount', to: "transitions#cancelAccountAmount"
+  post '/completed_order', to: "orders#completed_order"
+  post '/notifications/read', to: "notifications#notification_read"
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

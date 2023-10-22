@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_22_044114) do
+ActiveRecord::Schema.define(version: 2023_10_07_125309) do
 
   create_table "active_storage_attachments", charset: "utf8mb3", force: :cascade do |t|
     t.string "name", null: false
@@ -69,6 +69,15 @@ ActiveRecord::Schema.define(version: 2023_08_22_044114) do
     t.decimal "total", precision: 10
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "notifications", charset: "utf8mb3", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "message"
+    t.boolean "read", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "order_details", charset: "utf8mb3", force: :cascade do |t|
@@ -131,4 +140,5 @@ ActiveRecord::Schema.define(version: 2023_08_22_044114) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "cakes", "users"
+  add_foreign_key "notifications", "users"
 end

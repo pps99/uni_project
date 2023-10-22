@@ -29,6 +29,16 @@ class TransitionsController < ApplicationController
 
   def savetransition_no
     @transition_no = TransitionService.savetransition_no(params)
-    render json: { }, status: :ok
+    notification = Notification.new({ user_id: params[:user_id], message: "recharge_amount" })
+
+    if notification.save
+      notification_json = notification.to_json
+      # Broadcast the JSON representation of the notification
+      ActionCable.server.broadcast("notifications_1", notification: notification_json)
+      render json: {}, status: :ok
+    else
+      # Handle the case where the notification couldn't be saved
+      render json: { error: 'Failed to save notification' }, status: :unprocessable_entity
+    end
   end
 end
