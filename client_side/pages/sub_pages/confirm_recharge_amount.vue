@@ -26,7 +26,7 @@
                 <strong>Transition No:</strong> {{ recharge_item['transition'].transition_no }}
               </p>
             </div>
-            <button class="btn btn-primary custom-button" @click="cancelAmount(recharge_item['transition'])">Cancel</button>
+            <button class="btn btn-dark" @click="goback()">Back</button>
             <button class="btn btn-primary custom-button" @click="updateAmount(recharge_item['transition'])">Confirm</button>
           </div>
         </div>

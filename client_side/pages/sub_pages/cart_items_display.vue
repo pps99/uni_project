@@ -36,21 +36,6 @@
         </div>
       </div>
     </div>
-    <div class="modal" id="alertModal">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Alert</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            Please log in first to place an order.
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 <script>
@@ -76,11 +61,13 @@ export default {
       if(this.$auth.loggedIn){
         this.$router.push({ name: 'sub_pages-order_view', params: { amount: this.amount }});
       }else{
-        // Show the alert modal
-        const alertModal = document.getElementById('alertModal');
-        $(alertModal).modal('show');
+        return alert("Please log in first to place an order.")
       }
-    }
+    },
+    closeAlertModal() {
+        const alertModal = document.getElementById('alertModal');
+        $(alertModal).modal('hide');
+    },
   },
   mounted() {
   }
@@ -96,7 +83,7 @@ export default {
 .dropdown-menu {
   display: none;
   position: absolute;
-  max-height: 150px;
+  max-height: 300px;
   overflow-y: auto;
   z-index: 1;
   width: 300px; /* Set a fixed width */

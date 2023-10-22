@@ -119,7 +119,7 @@ export default{
           })
         }else
         {
-          alert("Your balance is insufficient! Plase Top Up");
+          alert("Your balance is insufficient! Please Top Up");
         }
       },
       back(){

@@ -28,6 +28,7 @@ export default {
   plugins: [
     { src: '~/plugins/vue-notification.js', ssr: false },
     { src: '~/plugins/vue-datepicker', ssr: false },
+    { src: '~/plugins/websocket.js', ssr: false }, 
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

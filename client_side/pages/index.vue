@@ -7,13 +7,18 @@
           <div class="d-flex">
             <div class="collapse navbar-collapse" id="navbarSupportedContent"> 
               <form class="d-flex">
-                <input class="form-control me-2 reduced-opacity" style="width: 300px;" type="search" placeholder="Search" aria-label="Search" v-model="search">
+                <input class="form-control me-2 reduced-opacity" style="width: 300px;" type="search" placeholder="Search By Name" aria-label="Search" v-model="search">
                 <button class="btn btn-secondary ml-2"  @click.prevent="searchitem()">Search</button>
               </form>
               <cart_items_display ref="childRef" :cart_items="cart_items" :shouldDisableLink="shouldDisableLink" :amount="amount" />
             </div>
             <profile_avatar v-if="$auth.loggedIn" :amount="amount" />
             <button v-else class="float-right mt-2 btn btn-info" @click="loggedIn"> Log In </button>
+            <div v-if="$auth.loggedIn">
+              <div v-if="$auth.user.user.role == 'admin'">
+                <notification :notifications="notifications" @remove-notification="removeNotification" />
+              </div>
+            </div>
           </div>
         </div>
       </nav>
@@ -75,18 +80,21 @@
 import { BootstrapVueIcons } from 'bootstrap-vue'
 import cart_items_display from './sub_pages/cart_items_display.vue'
 import profile_avatar from './sub_pages/profile_avatar.vue'
+import Notification from './sub_pages/notifications_display.vue';
 export default {
   auth: 'guest',
   components: {
     BootstrapVueIcons,
     cart_items_display,
-    profile_avatar
+    profile_avatar,
+    Notification
   },
   data(){
     return{
       type_names: [],
       relateditems: [],
       items: [],
+      notifications: [],
       cart_items: [],
       quantities: [],
       search: '',
@@ -130,9 +138,11 @@ export default {
           id: this.cart_items.length + 1,
           cake_id: relateditem.id,
           cake_name: relateditem.name,
-          unit_price: relateditem.price,
+          unit_price: relateditem.discount ? (relateditem.price - ((relateditem.price * relateditem.discount) / 100)) : relateditem.price,
+          discount: relateditem.discount,
           quantity: this.quantity
         };
+
       this.cart_items.filter(cart_item => {
         if(cart_item.cake_id == newItem.cake_id)
         {
@@ -189,6 +199,29 @@ export default {
       const newPrice = originalPrice - discountAmount;
       return newPrice; // Assuming you want to display the new price with 2 decimal places
     },
+    removeNotification(id) {
+      // Find and remove the notification from the notifications array
+      this.notifications = this.notifications.filter((notification) => notification.id !== id);
+    },
+    generateUniqueId() {
+      return new Date().getTime() + Math.floor(Math.random() * 1000);
+    },
+    fetchNotificationsFromDatabase(){
+      this.$axios.get(`/notifications`)
+        .then(response => {
+          this.notifications= response.data.notifications;
+          console.log("This",this.notifications)
+        })
+        .catch(error => {
+          this.$notify({
+            title: 'Fail',
+            text: 'Something went wrong. Please try again',
+            type: 'error'
+          });
+          this.errors = error.response.data.error
+          this.errorMessage = true
+        })
+    }
   },
   mounted() {
     this.$axios.get(`/items`)
@@ -244,6 +277,28 @@ export default {
           this.errorMessage = true
         })
       }
+      if (this.$auth.user.user.role == "admin") {
+        this.fetchNotificationsFromDatabase();
+        const cable = this.$cable;
+
+        const subscription = cable.subscriptions.create(
+          { channel: 'NotificationsChannel', user_id: 1 },
+          {
+            received: (data) => {
+              // Handle incoming notifications
+              const notificationData = JSON.parse(data.notification);
+              this.notifications.push(notificationData);
+            },
+          }
+        );
+          this.subscription = subscription; // Store the subscription for later cleanup
+     }
+    }
+  },
+  beforeDestroy() {
+    // Unsubscribe from the WebSocket channel when the component is destroyed
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   },
   watch: {

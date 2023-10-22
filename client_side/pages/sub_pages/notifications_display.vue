@@ -1,13 +1,13 @@
 <template>
   <div class="notification-container">
     <div
-      v-for="notification in notifications"
-      :key="notification.id"
+      v-for="(notification, index) in notifications"
+      :key="index"
       class="alert alert-dismissible fade show notification-item"
-      @click="handleNotificationClick(notification.message.message)"
+      @click="handleNotificationClick(notification.message,index)"
     >
-      {{ notification.message.message }}
-      <button @click="removeNotification(notification.id)" class="close-button close">
+      {{ index }} - {{ notification.message }}
+      <button @click="removeNotification(index)" class="close-button close">
         <span>&times;</span>
       </button>
     </div>
@@ -20,11 +20,25 @@ export default {
     notifications: Array,
   },
   methods: {
-    removeNotification(id) {
-      // Remove the notification with the given ID from the notifications array
-      this.$emit('remove-notification', id);
+    removeNotification(index) {
+      // Remove the notification at the specified index from the notifications array
+      console.log(this.notifications[index]);
+      this.notifications.splice(index, 1);
     },
-    handleNotificationClick(message) {
+    handleNotificationClick(message,index) {
+      this.$axios.post(`/notifications/read?id=${this.notifications[index].id}`)
+        .then(response => {
+          console.log("Successful");
+        })
+        .catch(error => {
+          this.$notify({
+            title: 'Fail',
+            text: 'Something went wrong. Please try again',
+            type: 'error'
+          });
+          this.errors = error.response.data.error
+          this.errorMessage = true
+        })
       if (message === 'recharge_amount') {
         // Use the Vue Router to navigate to the desired route
         this.$router.push('/sub_pages/confirm_recharge_amount');
@@ -43,6 +57,8 @@ export default {
   bottom: 20px;
   right: 20px;
   z-index: 1000;
+  max-height: 250px; /* Adjust the max-height as needed */
+  overflow-y: auto; /* Enable vertical scrolling */
 }
 
 .notification-item {
